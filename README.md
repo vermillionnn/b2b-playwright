@@ -51,4 +51,4 @@ Configure environment variables in `env/UAT.env` for your testing environment.
 
 ## License
 
-MIT
+Sociolla
