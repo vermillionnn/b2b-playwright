@@ -15,7 +15,7 @@ const baseUrl = process.env.BASE_URL;
 
 // Login before each test
 test.beforeEach(async ({ page }) => {
-  await b2b.login(page, process.env.BASE_URL, loginData.validUser.email, loginData.validUser.password);
+  await b2b.login(page, baseUrl, loginData.validUser.email, loginData.validUser.password);
 });
 
 // Create Customer
@@ -23,7 +23,8 @@ test('Create Customer GT - No Pinpoint - Save Draft', async ({ page }) => {
   const customerRegPage = new CustomerRegPage(page);
   const cr = customerRegPage.selectors;
 
-  const customerNameSequence = 'AF-GT-CUSTOMER-AUTO-' + getDate() + '-' + getSequenceNumber();
+  const sequenceNum = await getSequenceNumber();
+  const customerNameSequence = 'AF-GT-CUSTOMER-AUTO-' + getDate() + '-' + sequenceNum;
   console.log('Customer Name: ' + customerNameSequence);
 
   //GoTo Add Customer Menu
@@ -96,6 +97,7 @@ test('Create Customer GT - No Pinpoint - Save Draft', async ({ page }) => {
   await b2b.fillField(page, cr, 'mobileField', customerData.mobile);
   
   const customerEmailSequence = 'af.auto' + getDate() + '+test' + getEmailSequenceNumber() + '@yopmail.com';
+  console.log('Customer Email: ' + customerEmailSequence);
   await b2b.fillField(page, cr, 'emailField', customerEmailSequence);
 
   //Next Page
@@ -198,7 +200,8 @@ test('Create Customer MT - No Pinpoint - Save Draft', async ({ page }) => {
   const customerRegPage = new CustomerRegPage(page);
   const cr = customerRegPage.selectors;
 
-  const customerNameSequence = 'AF-MT-CUSTOMER-AUTO-' + getDate() + '-' + getSequenceNumber();
+  const sequenceNum = await getSequenceNumber();
+  const customerNameSequence = 'AF-MT-CUSTOMER-AUTO-' + getDate() + '-' + sequenceNum;
   console.log('Customer Name: ' + customerNameSequence);
 
   //GoTo Add Customer Menu
@@ -271,6 +274,7 @@ test('Create Customer MT - No Pinpoint - Save Draft', async ({ page }) => {
   await b2b.fillField(page, cr, 'mobileField', customerData.mobile);
   
   const customerEmailSequence = 'af.auto' + getDate() + '+test' + getEmailSequenceNumber() + '@yopmail.com';
+  console.log('Customer Email: ' + customerEmailSequence);
   await b2b.fillField(page, cr, 'emailField', customerEmailSequence);
 
   //Next Page
