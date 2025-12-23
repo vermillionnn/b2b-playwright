@@ -1,0 +1,17 @@
+{
+    "product": {
+        "name": "Banana Milk One Pack Sheet Mask",
+        "quantity": "10",
+        "ref_code": "",
+        "ean_no": ""
+    },
+    "customer": {
+        "name":"AF Test MT SA"
+    },
+    "pricelist": {
+        "name": "af pricelist mt new"
+    },
+    "salesman": {
+        "name": "AF Salesman"
+    }
+}

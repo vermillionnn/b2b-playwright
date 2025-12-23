@@ -1,0 +1,16 @@
+{
+    "invalidEmail": {
+        "email": "ahmad.faiz+invalid@sociolla.com",
+        "password": "Fran@12345",
+        "errorMsg": ""
+    },
+    "invalidPassword": {
+        "email": "ahmad.faiz+test2@sociolla.com",
+        "password": "Fran@123456",
+        "errorMsg": ""
+    },
+    "validUser": {
+        "email": "ahmad.faiz+test2@sociolla.com",
+        "password": "Fran@12345"
+    }
+}
