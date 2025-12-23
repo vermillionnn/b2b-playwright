@@ -5,8 +5,11 @@
         "ref_code": "",
         "ean_no": ""
     },
-    "customer": {
+    "customerMT": {
         "name":"AFT MT Customer Automation"
+    },
+    "customerGT": {
+        "name":"AFT GT Customer Automation"
     },
     "pricelist": {
         "name": "af pricelist mt new"

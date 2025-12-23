@@ -19,7 +19,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 // Create SO
-test('Create Sales Order', async ({ page }) => {
+test('Create Sales Order MT - Submit', async ({ page }) => {
   const salesOrderPage = new SalesOrderPage(page);
   const so = salesOrderPage.selectors;
   
@@ -42,8 +42,8 @@ test('Create Sales Order', async ({ page }) => {
   );
   
   await expect(so.modal).toBeVisible({ timeout: 10000 });
-  await so.modal.fill(salesOrderData.customer.name);
-  await page.getByText(salesOrderData.customer.name).click({ timeout: 10000 });
+  await so.modal.fill(salesOrderData.customerMT.name);
+  await page.getByText(salesOrderData.customerMT.name).click({ timeout: 10000 });
   
   // Extract customer data from API response
   const response = await responsePromise;
@@ -155,7 +155,7 @@ test('Create Sales Order', async ({ page }) => {
   // Add Customer Signature
   await so.customerSignatureField.click({ force: true });
   await b2b.drawSignature(page);
-  await so.nameSignatureField.fill(salesOrderData.customer.name);
+  await so.nameSignatureField.fill(salesOrderData.customerMT.name);
   await page.getByRole('button', { name: 'Add' }).click({ force: true });
 
   // Request Confirmation
@@ -165,6 +165,158 @@ test('Create Sales Order', async ({ page }) => {
   
   await expect(page.getByText('Sales Order Submitted').nth(4)).toBeVisible({ timeout: 10000 });
   await page.getByText('OK').nth(2).click();
+});
+
+test('Create Sales Order MT - Save Draft', async ({ page }) => {
+  const salesOrderPage = new SalesOrderPage(page);
+  const so = salesOrderPage.selectors;
+  
+  // Navigate to Add Sales Order Menu
+  await b2b.goToMenu(page, baseUrl, 'Transaction', 'Add Sales Order');
+  await page.waitForLoadState('networkidle');
+
+  // Select Customer with API response handling
+  await expect(so.customerField).toBeVisible({ timeout: 10000 });
+  await so.customerField.click({ force: true });
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(1000);
+  
+  const responsePromise = page.waitForResponse(response =>
+    response.url().includes('uat-b2b-ms-accounts.sociolabs.io/customers') &&
+    response.url().includes('filter[status]=approved') &&
+    response.url().includes('filter[is_active]=true') &&
+    response.status() === 200,
+    { timeout: 25000 }
+  );
+  
+  await expect(so.modal).toBeVisible({ timeout: 10000 });
+  await so.modal.fill(salesOrderData.customerMT.name);
+  await page.getByText(salesOrderData.customerMT.name).click({ timeout: 10000 });
+  
+  // Extract customer data from API response
+  const response = await responsePromise;
+  const responseData = await response.json();
+  const customerData = responseData.data[0];
+  const invoiceAddress = customerData.invoice_address[0].name;
+  const deliveryAddressName = customerData.delivery_address[0].name;
+  const deliveryAddressFull = `${customerData.delivery_address[0].street}, ${customerData.delivery_address[0].city.name}, ${customerData.delivery_address[0].country.name}, ${customerData.delivery_address[0].postal_code}`;
+  const salesTeam = customerData.sales_team.name;
+  const salesPerson = customerData.user.name;
+  const warehouseName = customerData.sales_team.warehouse.name;
+
+  console.log('Extracted Delivery Address: ' + deliveryAddressFull);
+  console.log('Extracted Sales Team: ' + salesTeam);
+  console.log('Extracted salesPerson: ' + salesPerson);
+  console.log('Extracted Warehouse: ' + warehouseName);
+  
+  // Verify invoice address auto-populated
+  await expect(so.invoiceAddressField).toHaveValue(invoiceAddress);
+
+  // Select Delivery Address
+  await b2b.selectDropdown(page, so, 'deliveryAddressField', deliveryAddressName);
+  await expect(page.getByText(deliveryAddressFull).first()).toBeVisible();
+
+  // Select Sales Team
+  await b2b.selectDropdown(page, so, 'salesTeamField', salesTeam);
+  
+  // Select Sales Person
+  await b2b.selectDropdown(page, so, 'salesPersonField', salesPerson);
+
+  // Verify Warehouse auto-selected
+  await expect(so.warehouseField).toHaveValue(warehouseName);
+
+  // Set Expiration Date (2 days from today)
+  await so.expirationDateField.click({ force: true, timeout: 10000 });
+  await page.waitForTimeout(1000);
+
+  const today = new Date();
+  const twoDaysFromToday = new Date(today);
+  twoDaysFromToday.setDate(twoDaysFromToday.getDate() + 2);
+  const expirationDay = twoDaysFromToday.getDate();
+  console.log('Today: ' + today.getDate() + ', Selecting expiration date: ' + expirationDay);
+  await page.getByText(String(expirationDay), {exact: true}).click({ force: true, timeout: 10000});
+  await page.getByText('SELECT', { exact: true }).click();
+
+  // Select Pricelist
+  await b2b.selectDropdown(page, so, 'pricelistField', salesOrderData.pricelist.name);
+
+  // Fill Customer PO Number
+  const customerPONumber = 'AFT-PO-AUTO-' + getDate() + '-' + getSequenceNumber();
+  await so.customerPONumberField.fill(customerPONumber);
+
+  // Set Customer PO Date (today)
+  await so.customerPODateField.click({ force: true, timeout: 10000 });
+  console.log('Selecting customer PO date: ' + today.getDate());
+  await page.waitForTimeout(1000);
+  await page.locator('div').filter({ hasText: String(today.getDate()) }).nth(3).click({ force: true, timeout: 10000 });
+  // await page.getByText(String(today.getDate()), {exact: true}).click({ force: true, timeout: 10000 });
+  await page.getByText('SELECT', { exact: true }).click();
+
+  // Add Attachment
+  await so.attachmentButton.scrollIntoViewIfNeeded();
+  const filePath = join(__dirname, './sample-file/sample-attachment.png');
+  const [fileChooser] = await Promise.all([
+      page.waitForEvent('filechooser'),
+      so.attachmentButton.click()
+  ]);
+  await fileChooser.setFiles(filePath);
+
+  // Add Product with API price handling
+  await so.addProductButton.scrollIntoViewIfNeeded();
+  await so.addProductButton.click();
+
+  const priceResponsePromise = page.waitForResponse(response =>
+    response.url().includes('uat-b2b-api.sociolabs.io/product-price-rules/search') &&
+    response.status() === 200,
+    { timeout: 20000 }
+  );
+
+  await b2b.selectDropdown(page, so, 'productNameField', salesOrderData.product.name);
+
+  // Get price from API response
+  const priceResponse = await priceResponsePromise;
+  const priceResponseData = await priceResponse.json();
+  const finalPrice = priceResponseData.data[0].final_price;
+  console.log('Extracted Final Price: ' + finalPrice);
+
+  await so.quantityField.fill(salesOrderData.product.quantity);
+  
+  // Save product line
+  await b2b.clickButton(page, so, 'saveButton');
+  // await page.getByRole('button', { name: 'Save', exact: true }).click({timeout: 10000});
+
+  // Save Sales Order
+  await so.saveFormButton.scrollIntoViewIfNeeded();
+  await b2b.clickButton(page, so, 'saveFormButton');
+  // await page.getByRole('button', { name: 'SAVE', exact: true }).scrollIntoViewIfNeeded();
+  // await page.getByRole('button', { name: 'SAVE', exact: true }).click();
+  
+  await expect(page.getByText('Sales Order Submitted').nth(1)).toBeVisible({ timeout: 10000 });
+  await page.getByText('OK').nth(1).click();
+  // await expect(page.getByRole('button', { name: 'Edit', exact: true })).toBeVisible();
+
+  // Add Salesman Signature
+  await so.salesmanSignatureField.scrollIntoViewIfNeeded();
+  await expect(so.salesmanSignatureField).toBeVisible();
+  await so.salesmanSignatureField.click({ force: true});
+  await page.waitForTimeout(1000);
+  await page.waitForLoadState('networkidle');
+  // await expect(so.signatureField).toBeVisible();
+  await b2b.drawSignature(page);
+  await so.nameSignatureField.fill(salesPerson);
+  await b2b.clickButton(page, so, 'addSignatureButton');
+
+  await page.waitForTimeout(1000);
+  await page.waitForLoadState('networkidle');
+  
+  // Add Customer Signature
+  await so.customerSignatureField.click({ force: true});
+  await page.waitForTimeout(1000);
+  await page.waitForLoadState('networkidle');
+  // await expect(so.signatureField).toBeVisible();
+  await b2b.drawSignature(page);
+  await so.nameSignatureField.fill(salesOrderData.customerMT.name);
+  await b2b.clickButton(page, so, 'addSignatureButton');
 });
 
 

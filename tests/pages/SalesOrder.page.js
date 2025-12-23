@@ -30,7 +30,8 @@ export class SalesOrderPage {
       
       // Signature fields
       salesmanSignatureField: page.getByText('ADD E-SIGNATURE').first(),
-      customerSignatureField: page.getByText('ADD E-SIGNATURE').nth(1),
+      customerSignatureField: page.getByText('ADD E-SIGNATURE'),
+      addSignatureField: page.getByText('ADD E-SIGNATURE'),
       signatureField: page.getByRole('img'),
       nameSignatureField: page.getByRole('textbox'),
       addSignatureButton: page.getByRole('button', { name: 'Add' }),
