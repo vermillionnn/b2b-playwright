@@ -15,7 +15,7 @@ dotenv.config({ path: 'env/UAT.env' });
 const baseUrl = process.env.BASE_URL;
 
 // Test Set for Superadmin User
-test.describe('Sales Order - Superadmin User', () => {
+test.describe('[Test Set] Create Sales Order - Superadmin', () => {
   test.beforeEach(async ({ page }) => {
     await b2b.login(page, baseUrl, loginData.validUser.email, loginData.validUser.password);
   });
@@ -384,13 +384,13 @@ test.describe('Sales Order - Superadmin User', () => {
 });
 
 // Test Set for Approver User
-test.describe('Sales Order - Approver User', () => {
+test.describe('[Test Set] Sales Order Approval', () => {
   test.beforeEach(async ({ page }) => {
     await b2b.login(page, baseUrl, loginData.approverUser.email, loginData.approverUser.password);
   });
 
   //Test Case: Approve Sales Order
-  test('Approve Sales Order', async ({ page }) => {
+  test('[Test Case] Approve Sales Order', async ({ page }) => {
     const salesOrderPage = new SalesOrderPage(page);
     const so = salesOrderPage.selectors;
 
@@ -427,7 +427,7 @@ test.describe('Sales Order - Approver User', () => {
   });
 
   //Test Case: Reject Sales Order
-  test.skip('Reject Sales Order', async ({ page }) => {
+  test.skip('[Test Case] Reject Sales Order', async ({ page }) => {
     const salesOrderPage = new SalesOrderPage(page);
     const so = salesOrderPage.selectors;
 
