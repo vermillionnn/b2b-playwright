@@ -166,3 +166,10 @@ export const search = async (page, selectors, searchValue) => {
   await selectors.searchBox.fill(searchValue);
   await clickButton(page, selectors, 'searchButton');
 };
+
+// Function to OK on Pop-up
+export const okPopUp = async (page, selectors, popUp) => {
+  await expect(selectors[popUp]).toBeVisible({ timeout: 10000 });
+  await page.getByText('OK').nth(1).click();
+  await page.waitForLoadState('networkidle');
+};

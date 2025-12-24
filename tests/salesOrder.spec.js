@@ -142,7 +142,6 @@ test.describe('Sales Order - Superadmin User', () => {
     
     // Save product
     await b2b.clickButton(page, so, 'saveButton');
-    // await page.getByRole('button', { name: 'Save', exact: true }).click({timeout: 10000});
 
     // Get SO Reference Code & Sales Order ID from API
     const referenceCodeResponsePromise = page.waitForResponse(response =>
@@ -178,6 +177,7 @@ test.describe('Sales Order - Superadmin User', () => {
     // Add Salesman Signature
     await so.salesmanSignatureField.scrollIntoViewIfNeeded();
     await expect(so.salesmanSignatureField).toBeVisible();
+
     await so.salesmanSignatureField.click({ force: true});
     await page.waitForTimeout(1000);
     await page.waitForLoadState('networkidle');
@@ -324,7 +324,6 @@ test.describe('Sales Order - Superadmin User', () => {
     
     // Save product
     await b2b.clickButton(page, so, 'saveButton');
-    // await page.getByRole('button', { name: 'Save', exact: true }).click({timeout: 10000});
 
     // Get SO Reference Code & Sales Order ID from API
     const referenceCodeResponsePromise = page.waitForResponse(response =>
@@ -360,6 +359,7 @@ test.describe('Sales Order - Superadmin User', () => {
     // Add Salesman Signature
     await so.salesmanSignatureField.scrollIntoViewIfNeeded();
     await expect(so.salesmanSignatureField).toBeVisible();
+
     await so.salesmanSignatureField.click({ force: true});
     await page.waitForTimeout(1000);
     await page.waitForLoadState('networkidle');
@@ -415,11 +415,12 @@ test.describe('Sales Order - Approver User', () => {
     await expect(so.needApprovalStatus).toBeVisible();
     await b2b.clickButton(page, so, 'confirmButton');
 
-    await expect(page.getByText('This sales order will be approved. Do you want to proceed?').first()).toBeVisible({ timeout: 10000 });
-    await page.getByText('OK').nth(1).click();
-    await page.waitForLoadState('networkidle');
-    await expect(page.getByText('Sales order has been confirmed').first()).toBeVisible({ timeout: 10000 });
-    await page.getByText('OK').nth(1).click();
+    // OK on confirmation pop-up
+    await b2b.okPopUp(page, so, 'confirmPopUp');
+
+    // OK on submitted pop-up
+    await b2b.okPopUp(page, so, 'submittedPopUp');
+
     await expect(so.approvedStatus).toBeVisible();
 
     await page.waitForTimeout(500);

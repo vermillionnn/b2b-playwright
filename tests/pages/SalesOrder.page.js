@@ -46,6 +46,8 @@ export class SalesOrderPage {
       cancelButton: page.getByRole('button', { name: 'Cancel' }),
       needApprovalStatus: page.locator('span').filter({ hasText: 'Need Approval' }),
       approvedStatus: page.locator('span').filter({ hasText: 'Approved' }),
+      confirmPopUp: page.getByText('This sales order will be approved. Do you want to proceed?').first(),
+      submittedPopUp: page.getByText('Sales order has been confirmed').first(),
     };
   }
 
