@@ -163,7 +163,7 @@ test('Create Customer GT - No Pinpoint - Save Draft', async ({ page }) => {
   // Delivery Address
   await b2b.addAddress(page, cr, 'addAddressField', {
     deliveryNameField: customerData.deliveryAddressName,
-    picField: customerData.addressPIC,
+    picAddressField: customerData.addressPIC,
     state: state,
     city: city,
     zipcodeField: customerData.zipcode,
@@ -340,7 +340,7 @@ test('Create Customer MT - No Pinpoint - Save Draft', async ({ page }) => {
   // Delivery Address
   await b2b.addAddress(page, cr, 'addAddressField', {
     deliveryNameField: customerData.deliveryAddressName,
-    picField: customerData.addressPIC,
+    picAddressField: customerData.addressPIC,
     state: state,
     city: city,
     zipcodeField: customerData.zipcode,
