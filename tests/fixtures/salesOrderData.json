@@ -2,8 +2,8 @@
     "product": {
         "name": "Banana Milk One Pack Sheet Mask",
         "quantity": "1",
-        "ref_code": "",
-        "ean_no": ""
+        "ref_code": "API.SC-BMOP211",
+        "ean_no": "8806185797573"
     },
     "customerMT": {
         "name": "AFT MT Customer Automation"
