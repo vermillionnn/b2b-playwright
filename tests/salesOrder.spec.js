@@ -20,13 +20,8 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
     await b2b.login(page, baseUrl, loginData.superadminUser.email, loginData.superadminUser.password);
   });
   
-  //Test Case: Sales Order Page Visibility
-  test('Sales Order Page Visibility', async ({ page }) => {
-  
-  });
-
   // Test Case: Create SO for MT Customer and Submit
-  test('Create Sales Order MT - Submit', async ({ page }) => {
+  test('[Test Case] Create Sales Order MT - Submit', async ({ page }) => {
     const salesOrderPage = new SalesOrderPage(page);
     const so = salesOrderPage.selectors;
     
@@ -208,7 +203,7 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
   });
   
   // Test Case: Create SO for MT Customer and Save Draft
-  test.skip('Create Sales Order MT - Save Draft', async ({ page }) => {
+  test.skip('[Test Case] Create Sales Order MT - Save Draft', async ({ page }) => {
     const salesOrderPage = new SalesOrderPage(page);
     const so = salesOrderPage.selectors;
     
