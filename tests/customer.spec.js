@@ -13,13 +13,12 @@ dotenv.config({ path: 'env/UAT.env' });
 // Test Data
 const baseUrl = process.env.BASE_URL;
 
-// Login before each test
-test.beforeEach(async ({ page }) => {
-  await b2b.login(page, baseUrl, loginData.validUser.email, loginData.validUser.password);
-});
-
 // Create Customer
 test.describe('[Test Set] Customer Registration - Superadmin', () => {
+  // Login before each test
+  test.beforeEach(async ({ page }) => {
+    await b2b.login(page, baseUrl, loginData.superadminUser.email, loginData.superadminUser.password);
+  });
   test('[Test Case] Create Customer GT - No Pinpoint - Save Draft', async ({ page }) => {
     const customerRegPage = new CustomerRegPage(page);
     const cr = customerRegPage.selectors;

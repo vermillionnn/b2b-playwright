@@ -17,7 +17,7 @@ const baseUrl = process.env.BASE_URL;
 // Test Set for Superadmin User
 test.describe('[Test Set] Create Sales Order - Superadmin', () => {
   test.beforeEach(async ({ page }) => {
-    await b2b.login(page, baseUrl, loginData.validUser.email, loginData.validUser.password);
+    await b2b.login(page, baseUrl, loginData.superadminUser.email, loginData.superadminUser.password);
   });
   
   //Test Case: Sales Order Page Visibility
