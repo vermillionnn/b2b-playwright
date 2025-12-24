@@ -19,7 +19,7 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
   test.beforeEach(async ({ page }) => {
     await b2b.login(page, baseUrl, loginData.superadminUser.email, loginData.superadminUser.password);
   });
-  
+
   // Test Case: Create SO for MT Customer and Submit
   test('[Test Case] Create Sales Order MT - Submit', async ({ page }) => {
     const salesOrderPage = new SalesOrderPage(page);
@@ -203,7 +203,7 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
   });
   
   // Test Case: Create SO for MT Customer and Save Draft
-  test.skip('[Test Case] Create Sales Order MT - Save Draft', async ({ page }) => {
+  test('[Test Case] Create Sales Order MT - Save Draft', async ({ page }) => {
     const salesOrderPage = new SalesOrderPage(page);
     const so = salesOrderPage.selectors;
     
@@ -422,9 +422,18 @@ test.describe('[Test Set] Sales Order Approval', () => {
   });
 
   //Test Case: Reject Sales Order
-  test.skip('[Test Case] Reject Sales Order', async ({ page }) => {
+  test('[Test Case] Reject Sales Order', async ({ page }) => {
     const salesOrderPage = new SalesOrderPage(page);
     const so = salesOrderPage.selectors;
+
+     // Read the saved sales order data
+    const salesOrderId = salesOrderData.lastCreatedSalesOrder.salesOrderId;
+    const referenceCode = salesOrderData.lastCreatedSalesOrder.referenceCode;
+    console.log('Sales Order ID: ' + salesOrderId);
+    console.log('Reference Code: ' + referenceCode);
+
+    await b2b.goToMenu(page, baseUrl, 'Transaction', 'Sales Order');
+    await page.waitForLoadState('networkidle');
 
   });
 
