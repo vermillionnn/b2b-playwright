@@ -2,6 +2,7 @@ import { expect } from '@playwright/test';
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
+// Function to perform login
 export const login = async (page, baseUrl, email, password) => {
     await page.goto(baseUrl);
     await page.getByTestId('RNE__Input__text-input').first().fill(email);
@@ -10,6 +11,7 @@ export const login = async (page, baseUrl, email, password) => {
     await expect(page).toHaveURL('https://uat-b2b-apps.sociolabs.io/dashboard');
 };
 
+// Function to navigate to a specific menu and submenu
 export const goToMenu = async (page, baseUrl, menu, subMenu) => {
     await expect(page.getByText(menu, { exact: true })).toBeVisible();
     await page.getByText(menu, { exact: true }).click();
@@ -17,6 +19,8 @@ export const goToMenu = async (page, baseUrl, menu, subMenu) => {
     // await expect(page).toHaveURL(baseUrl + '/sales-order/form/page?id=&name=&titleScreen=&firstAdded=');
 };
 
+
+// Function to select a value from a dropdown
 export const selectDropdown = async (page, selectors, fieldName, data) => {
   const field = selectors[fieldName];
   await expect(field).toBeVisible();
@@ -27,6 +31,7 @@ export const selectDropdown = async (page, selectors, fieldName, data) => {
   // await expect(field).toHaveValue(data);
 };
 
+// Function to fill a form field
 export const fillField = async (page, selectors, fieldName, data) => {
   const field = selectors[fieldName];
   await expect(field).toBeVisible();
@@ -34,6 +39,7 @@ export const fillField = async (page, selectors, fieldName, data) => {
   // await expect(field).toHaveValue(data);
 };
 
+// Function to draw e-signature
 export const drawSignature = async (page) => {
   await page.mouse.move(489, 284);
   await page.mouse.down();
@@ -41,12 +47,14 @@ export const drawSignature = async (page) => {
   await page.mouse.up();
 };
 
+// Function to click a button by its selector name
 export const clickButton = async (page, selectors, buttonName) => {
   const button = selectors[buttonName];
   await expect(button).toBeVisible();
   await button.click({ force: true });
 };
 
+// Function to add customer Address
 export const addAddress = async (page, selectors, addButtonSelector, fields) => {
   // Wait for and click the add button (handles both 'addAddressField' and 'addInvoiceAddressField')
   const addButton = selectors[addButtonSelector];
@@ -143,4 +151,11 @@ export const getEmailSequenceNumber = () => {
   emailSequenceStore.sequence++;
   saveEmailSequenceStore(emailSequenceStore);
   return String(emailSequenceStore.sequence);
+};
+
+// Function to search for Sales Order
+export const search = async (page, selectors, searchValue) => {
+  await expect(selectors.searchBox).toBeVisible();
+  await selectors.searchBox.fill(searchValue);
+  await clickButton(page, selectors, 'searchButton');
 };
