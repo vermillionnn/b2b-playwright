@@ -38,6 +38,14 @@ export class SalesOrderPage {
       addSignatureButton: page.getByRole('button', { name: 'Add' }),
 
       // Sales Order Page Fields
+      searchBox: page.getByPlaceholder('Search by...'),
+      searchButton: page.locator('div').filter({ hasText: /^Search$/ }).nth(2),
+
+      // Sales Order Detail fields
+      confirmButton: page.getByRole('button', { name: 'Confirm' }),
+      cancelButton: page.getByRole('button', { name: 'Cancel' }),
+      needApprovalStatus: page.locator('span').filter({ hasText: 'Need Approval' }),
+      approvedStatus: page.locator('span').filter({ hasText: 'Approved' }),
     };
   }
 

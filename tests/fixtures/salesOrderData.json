@@ -1,7 +1,7 @@
 {
     "product": {
         "name": "Banana Milk One Pack Sheet Mask",
-        "quantity": "10",
+        "quantity": "1",
         "ref_code": "",
         "ean_no": ""
     },
@@ -18,7 +18,7 @@
         "name": "AF Salesman"
     },
     "lastCreatedSalesOrder": {
-        "salesOrderId": "694b597e03b9ed4f2490cb12",
-        "referenceCode": "SO/SDI/HO/2025/00001646"
+        "salesOrderId": "694b672cbb34c4082b25eb4e",
+        "referenceCode": "SO/SDI/HO/2025/00001650"
     }
 }

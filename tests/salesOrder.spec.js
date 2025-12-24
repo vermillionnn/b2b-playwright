@@ -140,13 +140,37 @@ test.describe('Sales Order - Superadmin User', () => {
 
     await so.quantityField.fill(salesOrderData.product.quantity);
     
-    // Save product line
-    await page.getByRole('button', { name: 'Save', exact: true }).click({timeout: 10000});
+    // Save product
+    await b2b.clickButton(page, so, 'saveButton');
+    // await page.getByRole('button', { name: 'Save', exact: true }).click({timeout: 10000});
 
-    // Save Sales Order
-    await page.getByRole('button', { name: 'SAVE', exact: true }).scrollIntoViewIfNeeded();
-    await page.getByRole('button', { name: 'SAVE', exact: true }).click();
+    // Get SO Reference Code & Sales Order ID from API
+    const referenceCodeResponsePromise = page.waitForResponse(response =>
+      response.url().includes('uat-b2b-ms-orders.sociolabs.io/orders') &&
+      response.request().method() === 'POST' &&
+      response.status() === 200,
+      { timeout: 25000 }
+    );
     
+    // Save Sales Order
+    await so.saveFormButton.scrollIntoViewIfNeeded();
+    await b2b.clickButton(page, so, 'saveFormButton');
+    
+    const referenceCodeResponse = await referenceCodeResponsePromise;
+    const referenceCodeResponseData = await referenceCodeResponse.json();
+    const salesOrderId = referenceCodeResponseData.data._id;
+    const referenceCode = referenceCodeResponseData.data.reference_code;
+    console.log('Sales Order ID: ' + salesOrderId);
+    console.log('Sales Order Reference Code: ' + referenceCode);
+    
+    // Save to salesOrderData.json
+    const dataPath = join(__dirname, './fixtures/salesOrderData.json');
+    const data = JSON.parse(readFileSync(dataPath, 'utf-8'));
+    data.lastCreatedSalesOrder.salesOrderId = salesOrderId;
+    data.lastCreatedSalesOrder.referenceCode = referenceCode;
+    writeFileSync(dataPath, JSON.stringify(data, null, 4));
+    
+    // Sales Order Submitted Pop-Up
     await expect(page.getByText('Sales Order Submitted').nth(1)).toBeVisible({ timeout: 10000 });
     await page.getByText('OK').nth(1).click();
     await expect(page.getByRole('button', { name: 'Edit', exact: true })).toBeVisible();
@@ -328,9 +352,7 @@ test.describe('Sales Order - Superadmin User', () => {
     data.lastCreatedSalesOrder.referenceCode = referenceCode;
     writeFileSync(dataPath, JSON.stringify(data, null, 4));
     
-    // await page.getByRole('button', { name: 'SAVE', exact: true }).scrollIntoViewIfNeeded();
-    // await page.getByRole('button', { name: 'SAVE', exact: true }).click();
-    
+    // Sales Order Submitted Pop-Up
     await expect(page.getByText('Sales Order Submitted').nth(1)).toBeVisible({ timeout: 10000 });
     await page.getByText('OK').nth(1).click();
     // await expect(page.getByRole('button', { name: 'Edit', exact: true })).toBeVisible();
@@ -369,6 +391,9 @@ test.describe('Sales Order - Approver User', () => {
 
   //Test Case: Approve Sales Order
   test('Approve Sales Order', async ({ page }) => {
+    const salesOrderPage = new SalesOrderPage(page);
+    const so = salesOrderPage.selectors;
+
     // Read the saved sales order data
     const salesOrderId = salesOrderData.lastCreatedSalesOrder.salesOrderId;
     const referenceCode = salesOrderData.lastCreatedSalesOrder.referenceCode;
@@ -379,10 +404,31 @@ test.describe('Sales Order - Approver User', () => {
     await page.waitForLoadState('networkidle');
 
     // Search for the Sales Order by Reference Code
+    await b2b.search(page, so, referenceCode);
+    await page.waitForLoadState('networkidle');
+
+    // Open the Sales Order
+    await page.getByText(referenceCode, { exact: true }).first().click();
+    await page.waitForLoadState('networkidle');
+    
+    // Approve sales order
+    await expect(so.needApprovalStatus).toBeVisible();
+    await b2b.clickButton(page, so, 'confirmButton');
+
+    await expect(page.getByText('Confirm Sales Order')).toBeVisible({ timeout: 10000 });
+    await page.getByText('OK').nth(1).click();
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByText('Sales Order Confirmed')).toBeVisible({ timeout: 10000 });
+    await page.getByText('OK').nth(1).click();
+    await expect(so.approvedStatus).toBeVisible();
+
+    await page.waitForTimeout(500);
   });
 
   //Test Case: Reject Sales Order
   test.skip('Reject Sales Order', async ({ page }) => {
+    const salesOrderPage = new SalesOrderPage(page);
+    const so = salesOrderPage.selectors;
 
   });
 
