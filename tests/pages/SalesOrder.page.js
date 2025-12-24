@@ -4,6 +4,7 @@ export class SalesOrderPage {
     
     // Form field selectors
     this.selectors = {
+      // Sales Order Edit Form Fields
       customerField: page.getByPlaceholder('Select Customer'),
       modal: page.getByRole('textbox', { name: 'Search something here...' }),
       invoiceAddressField: page.getByRole('textbox', { name: 'Select Invoice Address' }),
@@ -35,6 +36,8 @@ export class SalesOrderPage {
       signatureField: page.getByRole('img'),
       nameSignatureField: page.getByRole('textbox'),
       addSignatureButton: page.getByRole('button', { name: 'Add' }),
+
+      // Sales Order Page Fields
     };
   }
 
