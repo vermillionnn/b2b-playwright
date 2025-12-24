@@ -1,6 +1,7 @@
 // @ts-check
 import { test, expect } from '@playwright/test';
 import { join } from 'path';
+import { readFileSync, writeFileSync } from 'fs';
 import dotenv from 'dotenv';
 import { SalesOrderPage } from './pages/SalesOrder.page';
 import loginData from './fixtures/loginData.json' assert { type: 'json' };
@@ -66,7 +67,7 @@ test('Create Sales Order MT - Submit', async ({ page }) => {
 
   // Select Delivery Address
   await b2b.selectDropdown(page, so, 'deliveryAddressField', deliveryAddressName);
-  await expect(page.getByText(deliveryAddressFull)).toBeVisible();
+  await expect(page.getByText(deliveryAddressFull).first()).toBeVisible();
 
   // Select Sales Team
   await b2b.selectDropdown(page, so, 'salesTeamField', salesTeam);
@@ -146,17 +147,26 @@ test('Create Sales Order MT - Submit', async ({ page }) => {
 
   // Add Salesman Signature
   await so.salesmanSignatureField.scrollIntoViewIfNeeded();
-  await so.salesmanSignatureField.click({ force: true });
-  await expect(so.signatureField).toBeVisible();
+  await expect(so.salesmanSignatureField).toBeVisible();
+  await so.salesmanSignatureField.click({ force: true});
+  await page.waitForTimeout(1000);
+  await page.waitForLoadState('networkidle');
+  // await expect(so.signatureField).toBeVisible();
   await b2b.drawSignature(page);
   await so.nameSignatureField.fill(salesPerson);
-  await page.getByRole('button', { name: 'Add' }).click({ force: true });
+  await b2b.clickButton(page, so, 'addSignatureButton');
+
+  await page.waitForTimeout(1000);
+  await page.waitForLoadState('networkidle');
   
   // Add Customer Signature
-  await so.customerSignatureField.click({ force: true });
+  await so.customerSignatureField.click({ force: true});
+  await page.waitForTimeout(1000);
+  await page.waitForLoadState('networkidle');
+  // await expect(so.signatureField).toBeVisible();
   await b2b.drawSignature(page);
   await so.nameSignatureField.fill(salesOrderData.customerMT.name);
-  await page.getByRole('button', { name: 'Add' }).click({ force: true });
+  await b2b.clickButton(page, so, 'addSignatureButton');
 
   // Request Confirmation
   await page.getByRole('button', { name: 'Request Confirmation', exact: true }).scrollIntoViewIfNeeded();
@@ -281,13 +291,36 @@ test('Create Sales Order MT - Save Draft', async ({ page }) => {
 
   await so.quantityField.fill(salesOrderData.product.quantity);
   
-  // Save product line
+  // Save product
   await b2b.clickButton(page, so, 'saveButton');
   // await page.getByRole('button', { name: 'Save', exact: true }).click({timeout: 10000});
 
+  // Get SO Reference Code & Sales Order ID from API
+  const referenceCodeResponsePromise = page.waitForResponse(response =>
+    response.url().includes('uat-b2b-ms-orders.sociolabs.io/orders') &&
+    response.request().method() === 'POST' &&
+    response.status() === 200,
+    { timeout: 25000 }
+  );
+  
   // Save Sales Order
   await so.saveFormButton.scrollIntoViewIfNeeded();
   await b2b.clickButton(page, so, 'saveFormButton');
+  
+  const referenceCodeResponse = await referenceCodeResponsePromise;
+  const referenceCodeResponseData = await referenceCodeResponse.json();
+  const salesOrderId = referenceCodeResponseData.data._id;
+  const referenceCode = referenceCodeResponseData.data.reference_code;
+  console.log('Sales Order ID: ' + salesOrderId);
+  console.log('Sales Order Reference Code: ' + referenceCode);
+  
+  // Save to salesOrderData.json
+  const dataPath = join(__dirname, './fixtures/salesOrderData.json');
+  const data = JSON.parse(readFileSync(dataPath, 'utf-8'));
+  data.lastCreatedSalesOrder.salesOrderId = salesOrderId;
+  data.lastCreatedSalesOrder.referenceCode = referenceCode;
+  writeFileSync(dataPath, JSON.stringify(data, null, 4));
+  
   // await page.getByRole('button', { name: 'SAVE', exact: true }).scrollIntoViewIfNeeded();
   // await page.getByRole('button', { name: 'SAVE', exact: true }).click();
   
