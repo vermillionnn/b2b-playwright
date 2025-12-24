@@ -79,13 +79,19 @@ export const addAddress = async (page, selectors, addButtonSelector, fields) => 
 };
 
 // Sequence file paths
-const sequenceFilePath = join(__dirname, '../tests/fixtures/customerSequence.json');
+const getSequenceFilePath = (type = 'customer') => {
+  if (type === 'salesOrder') {
+    return join(__dirname, '../tests/fixtures/salesOrderSequence.json');
+  }
+  return join(__dirname, '../tests/fixtures/customerSequence.json');
+};
+
 const emailSequenceFilePath = join(__dirname, '../tests/fixtures/customerEmailSequence.json');
 
 // Function to load sequence store from file
-function loadSequenceStore() {
+function loadSequenceStore(filePath) {
   try {
-    const data = readFileSync(sequenceFilePath, 'utf-8');
+    const data = readFileSync(filePath, 'utf-8');
     return JSON.parse(data);
   } catch {
     return { lastDate: '', sequence: 0 };
@@ -94,8 +100,8 @@ function loadSequenceStore() {
 
 // Function to save sequence store to file
 /** @param {Object} store - The sequence store object */
-function saveSequenceStore(store) {
-  writeFileSync(sequenceFilePath, JSON.stringify(store, null, 2));
+function saveSequenceStore(filePath, store) {
+  writeFileSync(filePath, JSON.stringify(store, null, 2));
 }
 
 // Function to load email sequence store from file
@@ -124,8 +130,9 @@ export const getDate = () => {
 };
 
 // Function to get next sequence number. Resets to 1 if date has changed
-export const getSequenceNumber = () => {
-  let sequenceStore = loadSequenceStore();
+export const getSequenceNumber = (type = 'customer') => {
+  const filePath = getSequenceFilePath(type);
+  let sequenceStore = loadSequenceStore(filePath);
   const currentDate = getDate();
   
   if (sequenceStore.lastDate !== currentDate) {
@@ -134,7 +141,7 @@ export const getSequenceNumber = () => {
   }
   
   sequenceStore.sequence++;
-  saveSequenceStore(sequenceStore);
+  saveSequenceStore(filePath, sequenceStore);
   return String(sequenceStore.sequence).padStart(4, '0');
 };
 

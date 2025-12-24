@@ -100,7 +100,7 @@ test.describe('Sales Order - Superadmin User', () => {
     await b2b.selectDropdown(page, so, 'pricelistField', salesOrderData.pricelist.name);
 
     // Fill Customer PO Number
-    const customerPONumber = 'AFT-PO-AUTO-' + getDate() + '-' + getSequenceNumber();
+    const customerPONumber = 'AFT-PO-AUTO-' + getDate() + '-' + getSequenceNumber('salesOrder');
     await so.customerPONumberField.fill(customerPONumber);
 
     // Set Customer PO Date (today)
@@ -282,7 +282,7 @@ test.describe('Sales Order - Superadmin User', () => {
     await b2b.selectDropdown(page, so, 'pricelistField', salesOrderData.pricelist.name);
 
     // Fill Customer PO Number
-    const customerPONumber = 'AFT-PO-AUTO-' + getDate() + '-' + getSequenceNumber();
+    const customerPONumber = 'AFT-PO-AUTO-' + getDate() + '-' + getSequenceNumber('salesOrder');
     await so.customerPONumberField.fill(customerPONumber);
 
     // Set Customer PO Date (today)
@@ -415,10 +415,10 @@ test.describe('Sales Order - Approver User', () => {
     await expect(so.needApprovalStatus).toBeVisible();
     await b2b.clickButton(page, so, 'confirmButton');
 
-    await expect(page.getByText('Confirm Sales Order')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('This sales order will be approved. Do you want to proceed?').first()).toBeVisible({ timeout: 10000 });
     await page.getByText('OK').nth(1).click();
     await page.waitForLoadState('networkidle');
-    await expect(page.getByText('Sales Order Confirmed')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('Sales order has been confirmed').first()).toBeVisible({ timeout: 10000 });
     await page.getByText('OK').nth(1).click();
     await expect(so.approvedStatus).toBeVisible();
 

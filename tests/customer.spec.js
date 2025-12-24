@@ -23,7 +23,7 @@ test('Create Customer GT - No Pinpoint - Save Draft', async ({ page }) => {
   const customerRegPage = new CustomerRegPage(page);
   const cr = customerRegPage.selectors;
 
-  const sequenceNum = await getSequenceNumber();
+  const sequenceNum = await getSequenceNumber('customer');
   const customerNameSequence = 'AF-GT-CUSTOMER-AUTO-' + getDate() + '-' + sequenceNum;
   console.log('Customer Name: ' + customerNameSequence);
 
@@ -200,7 +200,7 @@ test('Create Customer MT - No Pinpoint - Save Draft', async ({ page }) => {
   const customerRegPage = new CustomerRegPage(page);
   const cr = customerRegPage.selectors;
 
-  const sequenceNum = await getSequenceNumber();
+  const sequenceNum = await getSequenceNumber('customer');
   const customerNameSequence = 'AF-MT-CUSTOMER-AUTO-' + getDate() + '-' + sequenceNum;
   console.log('Customer Name: ' + customerNameSequence);
 
