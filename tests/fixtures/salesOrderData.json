@@ -1,24 +1,40 @@
 {
-    "product": {
-        "name": "Banana Milk One Pack Sheet Mask",
-        "quantity": "1",
-        "ref_code": "API.SC-BMOP211",
-        "ean_no": "8806185797573"
+    "MT": {
+        "product": {
+            "name": "Banana Milk One Pack Sheet Mask",
+            "quantity": "1",
+            "ref_code": "API.SC-BMOP211",
+            "ean_no": "8806185797573"
+        },
+        "customer": {
+            "name": "AFT MT Customer Automation"
+        },
+        "pricelist": {
+            "name": "af pricelist mt new"
+        },
+        "salesman": {
+            "name": "AF Salesman"
+        }
     },
-    "customerMT": {
-        "name": "AFT MT Customer Automation"
-    },
-    "customerGT": {
-        "name": "AFT GT Customer Automation"
-    },
-    "pricelist": {
-        "name": "af pricelist mt new"
-    },
-    "salesman": {
-        "name": "AF Salesman"
+    "GT": {
+        "product": {
+            "name": "Banana Milk One Pack Sheet Mask",
+            "quantity": "1",
+            "ref_code": "API.SC-BMOP211",
+            "ean_no": "8806185797573"
+        },
+        "customer": {
+            "name": "AFT GT Customer Automation"
+        },
+        "pricelist": {
+            "name": "af pricelist gt"
+        },
+        "salesman": {
+            "name": "AF Salesman"
+        }
     },
     "lastCreatedSalesOrder": {
-        "salesOrderId": "694bc25c03b9ed4f2490eb35",
-        "referenceCode": "SO/SDI/HO/2025/00001661"
+        "salesOrderId": "694e0e43e63674aa06e30c4a",
+        "referenceCode": "SO/SDI/HO/2025/00001666"
     }
 }

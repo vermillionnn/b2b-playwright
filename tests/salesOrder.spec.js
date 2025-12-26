@@ -44,30 +44,35 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
     );
     
     await expect(so.modal).toBeVisible({ timeout: 10000 });
-    await so.modal.fill(salesOrderData.customerMT.name);
-    await page.getByText(salesOrderData.customerMT.name).click({ timeout: 10000 });
+    await so.modal.fill(salesOrderData.MT.customer.name);
+    await page.getByText(salesOrderData.MT.customer.name).click({ timeout: 10000 });
     
     // Extract customer data from API response
     const response = await responsePromise;
     const responseData = await response.json();
     const customerData = responseData.data[0];
     const invoiceAddress = customerData.invoice_address[0].name;
+    const invoiceAddressFull = `${customerData.invoice_address[0].street}, ${customerData.invoice_address[0].city.name}, ${customerData.invoice_address[0].country.name}, ${customerData.invoice_address[0].postal_code}`;
     const deliveryAddressName = customerData.delivery_address[0].name;
     const deliveryAddressFull = `${customerData.delivery_address[0].street}, ${customerData.delivery_address[0].city.name}, ${customerData.delivery_address[0].country.name}, ${customerData.delivery_address[0].postal_code}`;
     const salesTeam = customerData.sales_team.name;
     const salesPerson = customerData.user.name;
     const warehouseName = customerData.sales_team.warehouse.name;
 
+    console.log('Extracted Invoice Address: ' + invoiceAddressFull);
     console.log('Extracted Delivery Address: ' + deliveryAddressFull);
     console.log('Extracted Sales Team: ' + salesTeam);
     console.log('Extracted salesPerson: ' + salesPerson);
     console.log('Extracted Warehouse: ' + warehouseName);
     
-    // Verify invoice address auto-populated
+    // Select Invoice Address
+    await b2b.selectDropdown(page, so, 'invoiceAddressField', invoiceAddress);
     await expect(so.invoiceAddressField).toHaveValue(invoiceAddress);
+    await expect(page.getByText(invoiceAddressFull).first()).toBeVisible();
 
     // Select Delivery Address
     await b2b.selectDropdown(page, so, 'deliveryAddressField', deliveryAddressName);
+    await expect(so.deliveryAddressField).toHaveValue(deliveryAddressName);
     await expect(page.getByText(deliveryAddressFull).first()).toBeVisible();
 
     // Select Sales Team
@@ -92,7 +97,7 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
     await page.getByText('SELECT', { exact: true }).click();
 
     // Select Pricelist
-    await b2b.selectDropdown(page, so, 'pricelistField', salesOrderData.pricelist.name);
+    await b2b.selectDropdown(page, so, 'pricelistField', salesOrderData.MT.pricelist.name);
 
     // Fill Customer PO Number
     const customerPONumber = 'AFT-PO-AUTO-' + getDate() + '-' + getSequenceNumber('salesOrder');
@@ -125,7 +130,7 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
       { timeout: 20000 }
     );
 
-    await b2b.selectDropdown(page, so, 'productNameField', salesOrderData.product.name);
+    await b2b.selectDropdown(page, so, 'productNameField', salesOrderData.MT.product.name);
 
     // Get price from API response
     const priceResponse = await priceResponsePromise;
@@ -133,7 +138,7 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
     const finalPrice = priceResponseData.data[0].final_price;
     console.log('Extracted Final Price: ' + finalPrice);
 
-    await so.quantityField.fill(salesOrderData.product.quantity);
+    await so.quantityField.fill(salesOrderData.MT.product.quantity);
     
     // Save product
     await b2b.clickButton(page, so, 'saveButton');
@@ -190,7 +195,7 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
     await page.waitForLoadState('networkidle');
     // await expect(so.signatureField).toBeVisible();
     await b2b.drawSignature(page);
-    await so.nameSignatureField.fill(salesOrderData.customerMT.name);
+    await so.nameSignatureField.fill(salesOrderData.MT.customer.name);
     await b2b.clickButton(page, so, 'addSignatureButton');
 
     // Request Confirmation
@@ -226,30 +231,35 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
     );
     
     await expect(so.modal).toBeVisible({ timeout: 10000 });
-    await so.modal.fill(salesOrderData.customerMT.name);
-    await page.getByText(salesOrderData.customerMT.name).click({ timeout: 10000 });
+    await so.modal.fill(salesOrderData.MT.customer.name);
+    await page.getByText(salesOrderData.MT.customer.name).click({ timeout: 10000 });
     
     // Extract customer data from API response
     const response = await responsePromise;
     const responseData = await response.json();
     const customerData = responseData.data[0];
     const invoiceAddress = customerData.invoice_address[0].name;
+    const invoiceAddressFull = `${customerData.invoice_address[0].street}, ${customerData.invoice_address[0].city.name}, ${customerData.invoice_address[0].country.name}, ${customerData.invoice_address[0].postal_code}`;
     const deliveryAddressName = customerData.delivery_address[0].name;
     const deliveryAddressFull = `${customerData.delivery_address[0].street}, ${customerData.delivery_address[0].city.name}, ${customerData.delivery_address[0].country.name}, ${customerData.delivery_address[0].postal_code}`;
     const salesTeam = customerData.sales_team.name;
     const salesPerson = customerData.user.name;
     const warehouseName = customerData.sales_team.warehouse.name;
 
+    console.log('Extracted Invoice Address: ' + invoiceAddressFull);
     console.log('Extracted Delivery Address: ' + deliveryAddressFull);
     console.log('Extracted Sales Team: ' + salesTeam);
     console.log('Extracted salesPerson: ' + salesPerson);
     console.log('Extracted Warehouse: ' + warehouseName);
     
-    // Verify invoice address auto-populated
+    // Select Invoice Address
+    await b2b.selectDropdown(page, so, 'invoiceAddressField', invoiceAddress);
     await expect(so.invoiceAddressField).toHaveValue(invoiceAddress);
+    await expect(page.getByText(invoiceAddressFull).first()).toBeVisible();
 
     // Select Delivery Address
     await b2b.selectDropdown(page, so, 'deliveryAddressField', deliveryAddressName);
+    await expect(so.deliveryAddressField).toHaveValue(deliveryAddressName);
     await expect(page.getByText(deliveryAddressFull).first()).toBeVisible();
 
     // Select Sales Team
@@ -274,7 +284,7 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
     await page.getByText('SELECT', { exact: true }).click();
 
     // Select Pricelist
-    await b2b.selectDropdown(page, so, 'pricelistField', salesOrderData.pricelist.name);
+    await b2b.selectDropdown(page, so, 'pricelistField', salesOrderData.MT.pricelist.name);
 
     // Fill Customer PO Number
     const customerPONumber = 'AFT-PO-AUTO-' + getDate() + '-' + getSequenceNumber('salesOrder');
@@ -307,7 +317,7 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
       { timeout: 20000 }
     );
 
-    await b2b.selectDropdown(page, so, 'productNameField', salesOrderData.product.name);
+    await b2b.selectDropdown(page, so, 'productNameField', salesOrderData.MT.product.name);
 
     // Get price from API response
     const priceResponse = await priceResponsePromise;
@@ -315,7 +325,7 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
     const finalPrice = priceResponseData.data[0].final_price;
     console.log('Extracted Final Price: ' + finalPrice);
 
-    await so.quantityField.fill(salesOrderData.product.quantity);
+    await so.quantityField.fill(salesOrderData.MT.product.quantity);
     
     // Save product
     await b2b.clickButton(page, so, 'saveButton');
@@ -372,7 +382,7 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
     await page.waitForLoadState('networkidle');
     // await expect(so.signatureField).toBeVisible();
     await b2b.drawSignature(page);
-    await so.nameSignatureField.fill(salesOrderData.customerMT.name);
+    await so.nameSignatureField.fill(salesOrderData.MT.customer.name);
     await b2b.clickButton(page, so, 'addSignatureButton');
   });
 
