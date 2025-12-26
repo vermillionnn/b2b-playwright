@@ -82,6 +82,8 @@ export const addAddress = async (page, selectors, addButtonSelector, fields) => 
 const getSequenceFilePath = (type = 'customer') => {
   if (type === 'salesOrder') {
     return join(__dirname, '../tests/fixtures/salesOrderSequence.json');
+  } else if (type === 'skpInternal') {
+    return join(__dirname, '../tests/fixtures/skpInternalSequence.json');
   }
   return join(__dirname, '../tests/fixtures/customerSequence.json');
 };
@@ -172,4 +174,23 @@ export const okPopUp = async (page, selectors, popUp) => {
   await expect(selectors[popUp]).toBeVisible({ timeout: 10000 });
   await page.getByText('OK').nth(1).click();
   await page.waitForLoadState('networkidle');
+};
+
+// Function to select a date dynamically
+/** @param {Object} page - The Playwright page object */
+/** @param {Object} selectors - The page selectors object */
+/** @param {string} fieldName - The name of the date field selector (e.g., 'expirationDateField', 'customerPODateField') */
+/** @param {number} daysFromToday - Number of days from today (0=today, 1=tomorrow, 2=2 days from today, etc. Default: 0) */
+export const selectDate = async (page, selectors, fieldName, daysFromToday = 0) => {
+  await selectors[fieldName].click({ force: true, timeout: 10000 });
+  await page.waitForTimeout(1000);
+
+  const today = new Date();
+  const targetDate = new Date(today);
+  targetDate.setDate(targetDate.getDate() + daysFromToday);
+  const targetDay = targetDate.getDate();
+  
+  console.log('Today: ' + today.getDate() + ', Selecting date: ' + targetDay);
+  await page.getByText(String(targetDay), { exact: true }).click({ force: true, timeout: 10000 });
+  await page.getByText('SELECT', { exact: true }).click();
 };

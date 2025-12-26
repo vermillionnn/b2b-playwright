@@ -85,16 +85,7 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
     await expect(so.warehouseField).toHaveValue(warehouseName);
 
     // Set Expiration Date (2 days from today)
-    await so.expirationDateField.click({ force: true, timeout: 10000 });
-    await page.waitForTimeout(1000);
-
-    const today = new Date();
-    const twoDaysFromToday = new Date(today);
-    twoDaysFromToday.setDate(twoDaysFromToday.getDate() + 2);
-    const expirationDay = twoDaysFromToday.getDate();
-    console.log('Today: ' + today.getDate() + ', Selecting expiration date: ' + expirationDay);
-    await page.getByText(String(expirationDay), {exact: true}).click({ force: true, timeout: 10000});
-    await page.getByText('SELECT', { exact: true }).click();
+    await b2b.selectDate(page, so, 'expirationDateField', 2);
 
     // Select Pricelist
     await b2b.selectDropdown(page, so, 'pricelistField', salesOrderData.MT.pricelist.name);
@@ -102,14 +93,11 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
     // Fill Customer PO Number
     const customerPONumber = 'AFT-PO-AUTO-' + getDate() + '-' + getSequenceNumber('salesOrder');
     await so.customerPONumberField.fill(customerPONumber);
+    console.log('Customer PO Number: ' + customerPONumber);
 
     // Set Customer PO Date (today)
-    await so.customerPODateField.click({ force: true, timeout: 10000 });
-    console.log('Selecting customer PO date: ' + today.getDate());
-    await page.waitForTimeout(1000);
-    await page.locator('div').filter({ hasText: String(today.getDate()) }).nth(3).click({ force: true, timeout: 10000 });
+    await b2b.selectDate(page, so, 'customerPODateField', 0);
     // await page.getByText(String(today.getDate()), {exact: true}).click({ force: true, timeout: 10000 });
-    await page.getByText('SELECT', { exact: true }).click();
 
     // Add Attachment
     await so.attachmentButton.scrollIntoViewIfNeeded();
@@ -272,16 +260,7 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
     await expect(so.warehouseField).toHaveValue(warehouseName);
 
     // Set Expiration Date (2 days from today)
-    await so.expirationDateField.click({ force: true, timeout: 10000 });
-    await page.waitForTimeout(1000);
-
-    const today = new Date();
-    const twoDaysFromToday = new Date(today);
-    twoDaysFromToday.setDate(twoDaysFromToday.getDate() + 2);
-    const expirationDay = twoDaysFromToday.getDate();
-    console.log('Today: ' + today.getDate() + ', Selecting expiration date: ' + expirationDay);
-    await page.getByText(String(expirationDay), {exact: true}).click({ force: true, timeout: 10000});
-    await page.getByText('SELECT', { exact: true }).click();
+    await b2b.selectDate(page, so, 'expirationDateField', 2);
 
     // Select Pricelist
     await b2b.selectDropdown(page, so, 'pricelistField', salesOrderData.MT.pricelist.name);
@@ -289,14 +268,11 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
     // Fill Customer PO Number
     const customerPONumber = 'AFT-PO-AUTO-' + getDate() + '-' + getSequenceNumber('salesOrder');
     await so.customerPONumberField.fill(customerPONumber);
+    console.log('Customer PO Number: ' + customerPONumber);
 
     // Set Customer PO Date (today)
-    await so.customerPODateField.click({ force: true, timeout: 10000 });
-    console.log('Selecting customer PO date: ' + today.getDate());
-    await page.waitForTimeout(1000);
-    await page.locator('div').filter({ hasText: String(today.getDate()) }).nth(3).click({ force: true, timeout: 10000 });
+    await b2b.selectDate(page, so, 'customerPODateField', 0);
     // await page.getByText(String(today.getDate()), {exact: true}).click({ force: true, timeout: 10000 });
-    await page.getByText('SELECT', { exact: true }).click();
 
     // Add Attachment
     await so.attachmentButton.scrollIntoViewIfNeeded();
