@@ -13,6 +13,7 @@ dotenv.config({ path: 'env/UAT.env' });
 
 //Test Data
 const baseUrl = process.env.BASE_URL;
+const attachmentFilePath = join(__dirname, './sample-file/sample-attachment.png');
 
 // Test Set for Superadmin User
 test.describe('[Test Set] Create Sales Order - Superadmin', () => {
@@ -100,13 +101,7 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
     // await page.getByText(String(today.getDate()), {exact: true}).click({ force: true, timeout: 10000 });
 
     // Add Attachment
-    await so.attachmentButton.scrollIntoViewIfNeeded();
-    const filePath = join(__dirname, './sample-file/sample-attachment.png');
-    const [fileChooser] = await Promise.all([
-        page.waitForEvent('filechooser'),
-        so.attachmentButton.click()
-    ]);
-    await fileChooser.setFiles(filePath);
+    await b2b.uploadAttachment(page, so, 'attachmentButton', attachmentFilePath);
 
     // Add Product with API price handling
     await so.addProductButton.scrollIntoViewIfNeeded();
@@ -275,13 +270,7 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
     // await page.getByText(String(today.getDate()), {exact: true}).click({ force: true, timeout: 10000 });
 
     // Add Attachment
-    await so.attachmentButton.scrollIntoViewIfNeeded();
-    const filePath = join(__dirname, './sample-file/sample-attachment.png');
-    const [fileChooser] = await Promise.all([
-        page.waitForEvent('filechooser'),
-        so.attachmentButton.click()
-    ]);
-    await fileChooser.setFiles(filePath);
+    await b2b.uploadAttachment(page, so, 'attachmentButton', attachmentFilePath);
 
     // Add Product with API price handling
     await so.addProductButton.scrollIntoViewIfNeeded();
