@@ -13,3 +13,5 @@ env/
 /tests/fixtures/customerEmailSequence.json
 /tests/fixtures/salesOrderSequence.json
 /tests/fixtures/skpInternalSequence.json
+allure-results/
+allure-report/
