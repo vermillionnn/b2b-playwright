@@ -1,0 +1,42 @@
+{
+    "GT": {
+        "name": "AF Test GT SA",
+        "description": "SKP Internal Automation Test",
+        "coa": { 
+            "name": "B2B Trade Marketing Expense - Data Share Fee",
+            "taxIdCorporate": "2% - PPH 23 tax 2% (Default)",
+            "taxIdPersonal": "5%"
+        },
+        "type": "GT",
+        "active": "Active",
+        "inactive": "In Active",
+        "totalEstimateBudget": "1000000",
+        "customer": {
+            "name": "AFT GT Customer Automation",
+            "code": "",
+            "budgetSample": "500000"
+        },
+        "brand": {
+            "name": "Carasun"
+        },
+        "notes": "This is automation notes for SKP Internal GT"
+    },
+    "MT": {
+        "name": "AF Test MT SA",
+        "description": "SKP Internal Automation Test",
+        "coa": "B2B Trade Marketing Expense - Data Share Fee",
+        "taxIdCorporate": "2% - PPH 23 tax 2% (Default)",
+        "taxIdPersonal": "5%",
+        "type": "MT",
+        "active": "Active",
+        "inactive": "In Active",
+        "totalEstimateBudget": "1000000",
+        "customer": "AFT MT Customer Automation",
+        "brand": {
+            "name": "Carasun"
+        }
+    },
+    "toastMsg": {
+        "addCustomerBrand": "Customer and Brand Budget saved successfully"
+    }
+}
