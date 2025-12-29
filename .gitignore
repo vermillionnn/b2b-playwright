@@ -12,3 +12,4 @@ env/
 /tests/fixtures/customerSequence.json
 /tests/fixtures/customerEmailSequence.json
 /tests/fixtures/salesOrderSequence.json
+/tests/fixtures/skpOrderSequence.json
