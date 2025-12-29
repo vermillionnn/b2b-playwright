@@ -50,12 +50,6 @@ test.describe('[Test Set] Customer Registration - Superadmin', () => {
     await expect(cr.customerPhotoField).toBeVisible({ timeout: 10000});
     await cr.customerPhotoField.click({ timeout: 10000});
     await b2b.uploadAttachment(page, cr, 'customerPhotoField', photoFilePath);
-    // const filePath = join(__dirname, './sample-file/gt-yellow.png');
-    // const [fileChooser] = await Promise.all([
-    //     page.waitForEvent('filechooser'),
-    //     cr.customerPhotoField.click()
-    // ]);
-    // await fileChooser.setFiles(filePath);
     await expect(page.locator('img[src*="soc-uat-uploads.s3.amazonaws.com"]')).toBeVisible({ timeout: 5000});
   
     //Customer Name
@@ -229,12 +223,6 @@ test.describe('[Test Set] Customer Registration - Superadmin', () => {
     await expect(cr.customerPhotoField).toBeVisible({ timeout: 10000});
     await cr.customerPhotoField.click({ timeout: 10000});
     await b2b.uploadAttachment(page, cr, 'customerPhotoField', photoFilePath);
-    // const filePath = join(__dirname, './sample-file/mt-yellow.png');
-    // const [fileChooser] = await Promise.all([
-    //     page.waitForEvent('filechooser'),
-    //     cr.customerPhotoField.click()
-    // ]);
-    // await fileChooser.setFiles(filePath);
     await expect(page.locator('img[src*="soc-uat-uploads.s3.amazonaws.com"]')).toBeVisible({ timeout: 5000});
   
     //Customer Name
