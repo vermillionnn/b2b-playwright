@@ -194,3 +194,17 @@ export const selectDate = async (page, selectors, fieldName, daysFromToday = 0) 
   await page.getByText(String(targetDay), { exact: true }).click({ force: true, timeout: 10000 });
   await page.getByText('SELECT', { exact: true }).click();
 };
+
+// Function to upload attachment
+/** @param {Object} page - The Playwright page object */
+/** @param {Object} selectors - The page selectors object */
+/** @param {string} buttonName - The name of the attachment button selector */
+/** @param {string} filePath - The absolute path to the file to upload */
+export const uploadAttachment = async (page, selectors, buttonName, filePath) => {
+  await selectors[buttonName].scrollIntoViewIfNeeded();
+  const [fileChooser] = await Promise.all([
+    page.waitForEvent('filechooser'),
+    selectors[buttonName].click()
+  ]);
+  await fileChooser.setFiles(filePath);
+};
