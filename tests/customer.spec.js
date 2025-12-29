@@ -22,11 +22,12 @@ test.describe('[Test Set] Customer Registration - Superadmin', () => {
   test('[Test Case] Create Customer GT - No Pinpoint - Save Draft', async ({ page }) => {
     const customerRegPage = new CustomerRegPage(page);
     const cr = customerRegPage.selectors;
-  
+    const photoFilePath = join(__dirname, customerData.GT.photoPath);
+    
     const sequenceNum = await getSequenceNumber('customer');
     const customerNameSequence = 'AF-GT-CUSTOMER-AUTO-' + getDate() + '-' + sequenceNum;
     console.log('Customer Name: ' + customerNameSequence);
-  
+    
     //GoTo Add Customer Menu
     await b2b.goToMenu(page, baseUrl, 'Customer', 'Customer Registration');
     await page.waitForLoadState('networkidle');
@@ -48,12 +49,13 @@ test.describe('[Test Set] Customer Registration - Superadmin', () => {
     await page.waitForTimeout(500);
     await expect(cr.customerPhotoField).toBeVisible({ timeout: 10000});
     await cr.customerPhotoField.click({ timeout: 10000});
-    const filePath = join(__dirname, './sample-file/gt-yellow.png');
-    const [fileChooser] = await Promise.all([
-        page.waitForEvent('filechooser'),
-        cr.customerPhotoField.click()
-    ]);
-    await fileChooser.setFiles(filePath);
+    await b2b.uploadAttachment(page, cr, 'customerPhotoField', photoFilePath);
+    // const filePath = join(__dirname, './sample-file/gt-yellow.png');
+    // const [fileChooser] = await Promise.all([
+    //     page.waitForEvent('filechooser'),
+    //     cr.customerPhotoField.click()
+    // ]);
+    // await fileChooser.setFiles(filePath);
     await expect(page.locator('img[src*="soc-uat-uploads.s3.amazonaws.com"]')).toBeVisible({ timeout: 5000});
   
     //Customer Name
@@ -62,7 +64,7 @@ test.describe('[Test Set] Customer Registration - Superadmin', () => {
   
     //Company Address 1
     await expect(cr.streetField).toBeVisible();
-    await cr.streetField.fill(customerData.street)
+    await cr.streetField.fill(customerData.GT.street)
   
     //Select State ID
     await b2b.selectDropdown(page, cr, 'stateField', state);
@@ -83,18 +85,18 @@ test.describe('[Test Set] Customer Registration - Superadmin', () => {
     await b2b.selectDropdown(page, cr, 'cityField', city);
   
     //Input Zipcode
-    await b2b.fillField(page, cr, 'zipcodeField', customerData.zipcode);
+    await b2b.fillField(page, cr, 'zipcodeField', customerData.GT.zipcode);
   
     //Select Taxable Entrepreneur
     await expect(cr.pkpField).toBeVisible();
-    await expect(cr.pkpField).toHaveValue(customerData.pkp);
+    await expect(cr.pkpField).toHaveValue(customerData.GT.pkp);
   
     //Select WHT
-    await b2b.selectDropdown(page, cr, 'whtField', customerData.wht);
+    await b2b.selectDropdown(page, cr, 'whtField', customerData.GT.wht);
   
     //Input Phone, Mobile, Email
-    await b2b.fillField(page, cr, 'phoneField', customerData.phone);
-    await b2b.fillField(page, cr, 'mobileField', customerData.mobile);
+    await b2b.fillField(page, cr, 'phoneField', customerData.GT.phone);
+    await b2b.fillField(page, cr, 'mobileField', customerData.GT.mobile);
     
     const customerEmailSequence = 'af.auto' + getDate() + '+test' + getEmailSequenceNumber() + '@yopmail.com';
     console.log('Customer Email: ' + customerEmailSequence);
@@ -105,36 +107,36 @@ test.describe('[Test Set] Customer Registration - Superadmin', () => {
   
     //Page 2 - Sales Info Page
     //Select Sales Team
-    await b2b.selectDropdown(page, cr, 'salesTeamField', customerData.salesTeam);
+    await b2b.selectDropdown(page, cr, 'salesTeamField', customerData.GT.salesTeam);
   
     //Selet Market Type
-    await b2b.selectDropdown(page, cr, 'marketTypeField', customerData.marketTypeGT);
+    await b2b.selectDropdown(page, cr, 'marketTypeField', customerData.GT.marketType);
   
     //Select Business Type based on Sales Team
-    // await b2b.selectDropdown(page, cr, 'businessTypeField', customerData.businessTypeGT);
+    // await b2b.selectDropdown(page, cr, 'businessTypeField', customerData.GT.businessType);
     const businessTypefield = cr.businessTypeField;
     await expect(businessTypefield).toBeVisible();
     await businessTypefield.click({ force: true });
     await expect(page.getByRole('textbox', { name: 'Search something here...' })).toBeVisible({ timeout: 5000 });
-    await page.getByRole('textbox', { name: 'Search something here...' }).fill(customerData.businessTypeGT);
-    await page.getByText(customerData.businessTypeGT + ' (GT)', { exact: true }).click();  
-    await expect(businessTypefield).toHaveValue(customerData.businessTypeGT);
+    await page.getByRole('textbox', { name: 'Search something here...' }).fill(customerData.GT.businessType);
+    await page.getByText(customerData.GT.businessType + ' (GT)', { exact: true }).click();  
+    await expect(businessTypefield).toHaveValue(customerData.GT.businessType);
   
     //Select Account Based on Business Type
-    await b2b.selectDropdown(page, cr, 'accountField', customerData.accountGT);
+    await b2b.selectDropdown(page, cr, 'accountField', customerData.GT.account);
   
     //Select Sales Person based on Sales Team
-    await b2b.selectDropdown(page, cr, 'salesPersonField', customerData.salesPersonCode);
+    await b2b.selectDropdown(page, cr, 'salesPersonField', customerData.GT.salesPersonCode);
   
     //Fill Bank Name, Branch, Account Number, Account Name, Special Expiration Date
-    await b2b.fillField(page, cr, 'bankNameField', customerData.bankName);
-    await b2b.fillField(page, cr, 'branchField', customerData.branch);
-    await b2b.fillField(page, cr, 'accountNumberField', customerData.accountNumber);
-    await b2b.fillField(page, cr, 'accountNameField', customerData.accountName);
-    await b2b.fillField(page, cr, 'specialExpDateField', customerData.specialExp);
+    await b2b.fillField(page, cr, 'bankNameField', customerData.GT.bankName);
+    await b2b.fillField(page, cr, 'branchField', customerData.GT.branch);
+    await b2b.fillField(page, cr, 'accountNumberField', customerData.GT.accountNumber);
+    await b2b.fillField(page, cr, 'accountNameField', customerData.GT.accountName);
+    await b2b.fillField(page, cr, 'specialExpDateField', customerData.GT.specialExp);
   
     //Select Customer Type
-    await b2b.selectDropdown(page, cr, 'customerTypeField', customerData.customerType);
+    await b2b.selectDropdown(page, cr, 'customerTypeField', customerData.GT.customerType);
   
     //Next Page
     await b2b.clickButton(page, cr, 'nextButton');
@@ -142,53 +144,53 @@ test.describe('[Test Set] Customer Registration - Superadmin', () => {
     //Page 3 - Customer Address
     // NPWP Address
     await b2b.addAddress(page, cr, 'addAddressField', {
-      addressNameField: customerData.taxName,
-      taxNumberField: customerData.taxNumber,
+      addressNameField: customerData.GT.taxName,
+      taxNumberField: customerData.GT.taxNumber,
       state: state,
       city: city,
-      zipcodeField: customerData.zipcode,
-      streetField: customerData.street
+      zipcodeField: customerData.GT.zipcode,
+      streetField: customerData.GT.street
     });
   
     // KTP Address
     await b2b.addAddress(page, cr, 'addAddressField', {
-      addressNameField: customerData.idName,
-      idNumberField: customerData.idNumber,
+      addressNameField: customerData.GT.idName,
+      idNumberField: customerData.GT.idNumber,
       state: state,
       city: city,
-      zipcodeField: customerData.zipcode,
-      streetField: customerData.street
+      zipcodeField: customerData.GT.zipcode,
+      streetField: customerData.GT.street
     });
   
     // Delivery Address
     await b2b.addAddress(page, cr, 'addAddressField', {
-      deliveryNameField: customerData.deliveryAddressName,
-      picAddressField: customerData.addressPIC,
+      deliveryNameField: customerData.GT.deliveryAddressName,
+      picAddressField: customerData.GT.addressPIC,
       state: state,
       city: city,
-      zipcodeField: customerData.zipcode,
-      streetField: customerData.street,
-      mobileField: customerData.mobile
+      zipcodeField: customerData.GT.zipcode,
+      streetField: customerData.GT.street,
+      mobileField: customerData.GT.mobile
     });
   
     // Invoice Address
     await b2b.addAddress(page, cr, 'addInvoiceAddressField', {
-      addressNameField: customerData.invoiceAddressName,
+      addressNameField: customerData.GT.invoiceAddressName,
       state: state,
       city: city,
-      zipcodeField: customerData.zipcode,
-      streetField: customerData.street,
-      mobileField: customerData.mobile,
+      zipcodeField: customerData.GT.zipcode,
+      streetField: customerData.GT.street,
+      mobileField: customerData.GT.mobile,
       checkbox: true 
     });
   
     // Store Address
     await b2b.addAddress(page, cr, 'addStoreAddressField', {
-      addressNameField: customerData.invoiceAddressName,
-      storeCodeField: customerData.storeCode,
+      addressNameField: customerData.GT.invoiceAddressName,
+      storeCodeField: customerData.GT.storeCode,
       state: state,
       city: city,
-      streetField: customerData.street,
+      streetField: customerData.GT.street,
     });
   
     //Save Draft
@@ -199,6 +201,7 @@ test.describe('[Test Set] Customer Registration - Superadmin', () => {
   test('[Test Case] Create Customer MT - No Pinpoint - Save Draft', async ({ page }) => {
     const customerRegPage = new CustomerRegPage(page);
     const cr = customerRegPage.selectors;
+    const photoFilePath = join(__dirname, customerData.MT.photoPath);
   
     const sequenceNum = await getSequenceNumber('customer');
     const customerNameSequence = 'AF-MT-CUSTOMER-AUTO-' + getDate() + '-' + sequenceNum;
@@ -225,12 +228,13 @@ test.describe('[Test Set] Customer Registration - Superadmin', () => {
     await page.waitForTimeout(500);
     await expect(cr.customerPhotoField).toBeVisible({ timeout: 10000});
     await cr.customerPhotoField.click({ timeout: 10000});
-    const filePath = join(__dirname, './sample-file/mt-yellow.png');
-    const [fileChooser] = await Promise.all([
-        page.waitForEvent('filechooser'),
-        cr.customerPhotoField.click()
-    ]);
-    await fileChooser.setFiles(filePath);
+    await b2b.uploadAttachment(page, cr, 'customerPhotoField', photoFilePath);
+    // const filePath = join(__dirname, './sample-file/mt-yellow.png');
+    // const [fileChooser] = await Promise.all([
+    //     page.waitForEvent('filechooser'),
+    //     cr.customerPhotoField.click()
+    // ]);
+    // await fileChooser.setFiles(filePath);
     await expect(page.locator('img[src*="soc-uat-uploads.s3.amazonaws.com"]')).toBeVisible({ timeout: 5000});
   
     //Customer Name
@@ -239,7 +243,7 @@ test.describe('[Test Set] Customer Registration - Superadmin', () => {
   
     //Company Address 1
     await expect(cr.streetField).toBeVisible();
-    await cr.streetField.fill(customerData.street)
+    await cr.streetField.fill(customerData.MT.street)
   
     //Select State ID
     await b2b.selectDropdown(page, cr, 'stateField', state);
@@ -260,18 +264,18 @@ test.describe('[Test Set] Customer Registration - Superadmin', () => {
     await b2b.selectDropdown(page, cr, 'cityField', city);
   
     //Input Zipcode
-    await b2b.fillField(page, cr, 'zipcodeField', customerData.zipcode);
+    await b2b.fillField(page, cr, 'zipcodeField', customerData.MT.zipcode);
   
     //Select Taxable Entrepreneur
     await expect(cr.pkpField).toBeVisible();
-    await expect(cr.pkpField).toHaveValue(customerData.pkp);
+    await expect(cr.pkpField).toHaveValue(customerData.MT.pkp);
   
     //Select WHT
-    await b2b.selectDropdown(page, cr, 'whtField', customerData.wht);
+    await b2b.selectDropdown(page, cr, 'whtField', customerData.MT.wht);
   
     //Input Phone, Mobile, Email
-    await b2b.fillField(page, cr, 'phoneField', customerData.phone);
-    await b2b.fillField(page, cr, 'mobileField', customerData.mobile);
+    await b2b.fillField(page, cr, 'phoneField', customerData.MT.phone);
+    await b2b.fillField(page, cr, 'mobileField', customerData.MT.mobile);
     
     const customerEmailSequence = 'af.auto' + getDate() + '+test' + getEmailSequenceNumber() + '@yopmail.com';
     console.log('Customer Email: ' + customerEmailSequence);
@@ -282,10 +286,10 @@ test.describe('[Test Set] Customer Registration - Superadmin', () => {
   
     //Page 2 - Sales Info Page
     //Select Sales Team
-    await b2b.selectDropdown(page, cr, 'salesTeamField', customerData.salesTeam);
+    await b2b.selectDropdown(page, cr, 'salesTeamField', customerData.MT.salesTeam);
   
     //Selet Market Type
-    await b2b.selectDropdown(page, cr, 'marketTypeField', customerData.marketTypeMT);
+    await b2b.selectDropdown(page, cr, 'marketTypeField', customerData.MT.marketType);
   
     //Select Business Type based on Sales Team
     // await b2b.selectDropdown(page, cr, 'businessTypeField', customerData.businessTypeGT);
@@ -293,25 +297,25 @@ test.describe('[Test Set] Customer Registration - Superadmin', () => {
     await expect(businessTypefield).toBeVisible();
     await businessTypefield.click({ force: true });
     await expect(page.getByRole('textbox', { name: 'Search something here...' })).toBeVisible({ timeout: 5000 });
-    await page.getByRole('textbox', { name: 'Search something here...' }).fill(customerData.businessTypeMT);
-    await page.getByText(customerData.businessTypeMT + ' (MT)', { exact: true }).click();  
-    await expect(businessTypefield).toHaveValue(customerData.businessTypeMT);
+    await page.getByRole('textbox', { name: 'Search something here...' }).fill(customerData.MT.businessType);
+    await page.getByText(customerData.MT.businessType + ' (MT)', { exact: true }).click();  
+    await expect(businessTypefield).toHaveValue(customerData.MT.businessType);
   
     //Select Account Based on Business Type
-    await b2b.selectDropdown(page, cr, 'accountField', customerData.accountMT);
+    await b2b.selectDropdown(page, cr, 'accountField', customerData.MT.account);
   
     //Select Sales Person based on Sales Team
-    await b2b.selectDropdown(page, cr, 'salesPersonField', customerData.salesPersonCode);
+    await b2b.selectDropdown(page, cr, 'salesPersonField', customerData.MT.salesPersonCode);
   
     //Fill Bank Name, Branch, Account Number, Account Name, Special Expiration Date
-    await b2b.fillField(page, cr, 'bankNameField', customerData.bankName);
-    await b2b.fillField(page, cr, 'branchField', customerData.branch);
-    await b2b.fillField(page, cr, 'accountNumberField', customerData.accountNumber);
-    await b2b.fillField(page, cr, 'accountNameField', customerData.accountName);
-    await b2b.fillField(page, cr, 'specialExpDateField', customerData.specialExp);
+    await b2b.fillField(page, cr, 'bankNameField', customerData.MT.bankName);
+    await b2b.fillField(page, cr, 'branchField', customerData.MT.branch);
+    await b2b.fillField(page, cr, 'accountNumberField', customerData.MT.accountNumber);
+    await b2b.fillField(page, cr, 'accountNameField', customerData.MT.accountName);
+    await b2b.fillField(page, cr, 'specialExpDateField', customerData.MT.specialExp);
   
     //Select Customer Type
-    await b2b.selectDropdown(page, cr, 'customerTypeField', customerData.customerType);
+    await b2b.selectDropdown(page, cr, 'customerTypeField', customerData.MT.customerType);
   
     //Next Page
     await b2b.clickButton(page, cr, 'nextButton');
@@ -319,53 +323,53 @@ test.describe('[Test Set] Customer Registration - Superadmin', () => {
     //Page 3 - Customer Address
     // NPWP Address
     await b2b.addAddress(page, cr, 'addAddressField', {
-      addressNameField: customerData.taxName,
-      taxNumberField: customerData.taxNumber,
+      addressNameField: customerData.MT.taxName,
+      taxNumberField: customerData.MT.taxNumber,
       state: state,
       city: city,
-      zipcodeField: customerData.zipcode,
-      streetField: customerData.street
+      zipcodeField: customerData.MT.zipcode,
+      streetField: customerData.MT.street
     });
   
     // KTP Address
     await b2b.addAddress(page, cr, 'addAddressField', {
-      addressNameField: customerData.idName,
-      idNumberField: customerData.idNumber,
+      addressNameField: customerData.MT.idName,
+      idNumberField: customerData.MT.idNumber,
       state: state,
       city: city,
-      zipcodeField: customerData.zipcode,
-      streetField: customerData.street
+      zipcodeField: customerData.MT.zipcode,
+      streetField: customerData.MT.street
     });
   
     // Delivery Address
     await b2b.addAddress(page, cr, 'addAddressField', {
-      deliveryNameField: customerData.deliveryAddressName,
-      picAddressField: customerData.addressPIC,
+      deliveryNameField: customerData.MT.deliveryAddressName,
+      picAddressField: customerData.MT.addressPIC,
       state: state,
       city: city,
-      zipcodeField: customerData.zipcode,
-      streetField: customerData.street,
-      mobileField: customerData.mobile
+      zipcodeField: customerData.MT.zipcode,
+      streetField: customerData.MT.street,
+      mobileField: customerData.MT.mobile
     });
   
     // Invoice Address
     await b2b.addAddress(page, cr, 'addInvoiceAddressField', {
-      addressNameField: customerData.invoiceAddressName,
+      addressNameField: customerData.MT.invoiceAddressName,
       state: state,
       city: city,
-      zipcodeField: customerData.zipcode,
-      streetField: customerData.street,
-      mobileField: customerData.mobile,
+      zipcodeField: customerData.MT.zipcode,
+      streetField: customerData.MT.street,
+      mobileField: customerData.MT.mobile,
       checkbox: true 
     });
   
     // Store Address
     await b2b.addAddress(page, cr, 'addStoreAddressField', {
-      addressNameField: customerData.invoiceAddressName,
-      storeCodeField: customerData.storeCode,
+      addressNameField: customerData.MT.invoiceAddressName,
+      storeCodeField: customerData.MT.storeCode,
       state: state,
       city: city,
-      streetField: customerData.street,
+      streetField: customerData.MT.street,
     });
   
     //Save Draft
