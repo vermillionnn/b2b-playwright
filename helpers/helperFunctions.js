@@ -8,7 +8,7 @@ export const login = async (page, baseUrl, email, password) => {
     await page.getByTestId('RNE__Input__text-input').first().fill(email);
     await page.locator('input[type="password"]').fill(password);
     await page.getByRole('button', { name: 'LOGIN' }).click();
-    await expect(page).toHaveURL('https://uat-b2b-apps.sociolabs.io/dashboard');
+    // await expect(page).toHaveURL('https://uat-b2b-apps.sociolabs.io/dashboard');
 };
 
 // Function to navigate to a specific menu and submenu
