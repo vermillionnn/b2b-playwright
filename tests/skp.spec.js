@@ -2,7 +2,7 @@
 import { test, expect } from '@playwright/test';
 import { join } from 'path';
 import dotenv from 'dotenv';
-import { skpInternalPage } from './pages/skpInternal.page';
+import { skpInternalPage } from './pages/SkpInternal.page';
 import loginData from './fixtures/loginData.json' assert { type: 'json' };
 import skpData from './fixtures/skpData.json' assert { type: 'json' };
 import * as b2b from '../helpers/helperFunctions';
