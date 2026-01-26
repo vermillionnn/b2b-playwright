@@ -19,7 +19,7 @@ export class skpInternalPage {
         
         // Buttons
         addCustomerBrandButton: page.getByRole('button', { name: '+ Add', exact: true }),
-        attachmentButton: page.getByText('Upload Files').first(),
+        attachmentButton: page.locator('span').filter({ hasText: 'Upload Files' }).first(),
         saveDraftButton: page.getByRole('button', { name: 'Save Draft', exact: true }),
         requestConfirmationButton: page.getByRole('button', { name: 'Request Confirmation', exact: true }),
         saveButton: page.getByRole('button', { name: 'Save', exact: true }),
@@ -33,6 +33,7 @@ export class skpInternalPage {
         customerField: page.locator('div').filter({ hasText: /^Customer\*$/ }).getByRole('textbox'),
         brandField: page.locator('div').filter({ hasText: /^Brand\*$/ }).getByRole('textbox'),
         budgetSampleField: page.locator('div').filter({ hasText: /^Budget Sample\*$/ }).getByRole('textbox'),
+        outletField: page.locator('div').filter({ hasText: /^Outlet Name\*$/ }).getByRole('textbox'),
     };
   }
 
