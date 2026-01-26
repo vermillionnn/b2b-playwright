@@ -81,10 +81,19 @@ export const addAddress = async (page, selectors, addButtonSelector, fields) => 
       await selectDropdown(page, selectors, 'cityField', value);
     } else if (fieldKey === 'checkbox' && value) {
       await selectors.invoiceScheduleCheckbox.click();
+    } else if (fieldKey === 'pinpoint'){
+      if (value === true){
+        await page.getByText('Use current location').click();
+        await page.waitForLoadState('networkidle');
+      } else {
+        return
+      }
     } else {
       await fillField(page, selectors, fieldKey, value);
     }
   }
+
+
 
   // Save the address
   await clickButton(page, selectors, 'saveAddressButton');
