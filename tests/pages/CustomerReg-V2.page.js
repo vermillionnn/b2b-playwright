@@ -18,6 +18,9 @@ export class CustomerRegPage {
     this.emailField = page.locator('div').filter({ hasText: /^Email$/ }).first().getByRole('textbox');
     this.picField = page.locator('div').filter({ hasText: /^Person in Charge \(PIC\) Name$/ }).first().getByRole('textbox');
     this.jobTitleField = page.locator('div').filter({ hasText: /^Job Title$/ }).first().getByRole('textbox');
+    //Additional for VN
+    this.districtAreaField = page.locator('div').filter({ hasText: /^District Area\*$/ }).first().getByRole('textbox');
+    this.zipcodeVNField = page.locator('div').filter({ hasText: /^ZIP Code$/ }).first().getByRole('textbox');
     
     // Page 2 - Sales Information
     this.salesTeamField = page.locator('div').filter({ hasText: /^Sales Team\*$/ }).first().getByRole('textbox');
@@ -44,6 +47,9 @@ export class CustomerRegPage {
     this.storeCodeField = page.locator('div').filter({ hasText: /^Store Code\*$/ }).first().getByRole('textbox');
     this.addStoreAddressField = page.locator('div').filter({ hasText: /^Store Address$/ }).locator('..').locator('div[tabindex="0"]');
     this.addAddressField = page.getByText('+ Add Address').first();
+    //Additional for VN
+    this.taxNumberFieldVN = page.locator('div').filter({ hasText: /^Tax Identification Number\*$/ }).first().getByRole('textbox');
+    this.idNumberFieldVN = page.locator('div').filter({ hasText: /^Identification Number\*$/ }).first().getByRole('textbox');
 
     // Navigation & Action Buttons
     this.nextButton = page.getByRole('button', { name: 'Next' });
@@ -139,6 +145,11 @@ export class CustomerRegPage {
 
     // Optional invoice schedule checkbox
     if (data.checkbox) await this.invoiceScheduleCheckbox.click();
+
+    // Additional VN field
+    if (data.district) await this.selectDropdown(this.districtAreaField, data.district);
+    if (data.taxNumberVN) await this.taxNumberFieldVN.fill(data.taxNumberVN);
+    if (data.idNumberVN) await this.idNumberFieldVN.fill(data.idNumberVN);
 
     // Save address
     await this.saveAddressButton.scrollIntoViewIfNeeded();
