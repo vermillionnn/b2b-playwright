@@ -1,15 +1,13 @@
 {
     "GT": {
         "name": "AF Test GT SA",
-        "description": "SKP Internal Automation Test",
+        "description": "SKP Internal GT Automation Test",
         "coa": { 
             "name": "B2B Trade Marketing Expense - Data Share Fee",
             "taxIdCorporate": "2% - PPH 23 tax 2% (Default)",
             "taxIdPersonal": "5%"
         },
         "type": "GT",
-        "active": "Active",
-        "inactive": "In Active",
         "totalEstimateBudget": "1000000",
         "customer": {
             "name": "AFT GT Customer Automation",
@@ -23,18 +21,75 @@
     },
     "MT": {
         "name": "AF Test MT SA",
-        "description": "SKP Internal Automation Test",
-        "coa": "B2B Trade Marketing Expense - Data Share Fee",
-        "taxIdCorporate": "2% - PPH 23 tax 2% (Default)",
-        "taxIdPersonal": "5%",
+        "description": "SKP Internal MT Automation Test",
+        "coa": { 
+            "name": "B2B Trade Marketing Expense - Data Share Fee",
+            "taxIdCorporate": "2% - PPH 23 tax 2% (Default)",
+            "taxIdPersonal": "5%"
+        },
         "type": "MT",
-        "active": "Active",
-        "inactive": "In Active",
         "totalEstimateBudget": "1000000",
-        "customer": "AFT MT Customer Automation",
+        "customer": {
+            "name": "AFT MT Customer Automation",
+            "code": "",
+            "budgetSample": "500000"
+        },
         "brand": {
             "name": "Carasun"
-        }
+        },
+        "notes": "This is automation notes for SKP Internal MT"
+    },
+    "SubdisGT": {
+        "name": "AF Test GT SA",
+        "description": "SKP Internal Subdis GT Automation Test",
+        "coa": { 
+            "name": "B2B Trade Marketing Expense - Data Share Fee",
+            "taxIdCorporate": "2% - PPH 23 tax 2% (Default)",
+            "taxIdPersonal": "5%"
+        },
+        "type": "Sub Distributor",
+        "totalEstimateBudget": "1000000",
+        "customer": {
+            "name": "AFT SubDistributor GT",
+            "code": "",
+            "budgetSample": "500000",
+            "outlet": {
+                "name": "OUTLET AUTOMATION GT",
+                "code": "F2F-00178-AUTO-GT-1",
+                "marketType": "GT",
+                "businessType": "BT-AUTO-GT"
+            }
+        },
+        "brand": {
+            "name": "Carasun"
+        },
+        "notes": "This is automation notes for SKP Internal SubDistributor GT"
+    },
+    "SubdisMT": {
+        "name": "AF Test MT SA",
+        "description": "SKP Internal Subdis MT Automation Test",
+        "coa": { 
+            "name": "B2B Trade Marketing Expense - Data Share Fee",
+            "taxIdCorporate": "2% - PPH 23 tax 2% (Default)",
+            "taxIdPersonal": "5%"
+        },
+        "type": "Sub Distributor",
+        "totalEstimateBudget": "1000000",
+        "customer": {
+            "name": "AFT SubDistributor MT",
+            "code": "",
+            "budgetSample": "500000",
+            "outlet": {
+                "name": "OUTLET AUTOMATION MT",
+                "code": "F2F-00178-AUTO-MT-1",
+                "marketType": "MT",
+                "businessType": "BT-AUTO-MT"
+            }
+        },
+        "brand": {
+            "name": "Carasun"
+        },
+        "notes": "This is automation notes for SKP Internal SubDistributor MT"
     },
     "toastMsg": {
         "addCustomerBrand": "Customer and Brand Budget saved successfully"
