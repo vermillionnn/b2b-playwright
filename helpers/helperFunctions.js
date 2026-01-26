@@ -8,6 +8,17 @@ export const login = async (page, baseUrl, email, password) => {
     await page.getByTestId('RNE__Input__text-input').first().fill(email);
     await page.locator('input[type="password"]').fill(password);
     await page.getByRole('button', { name: 'LOGIN' }).click();
+    // await page.getByTestId('login-email-input').first().fill(email);
+    // await page.getByTestId('login-password-input').fill(password);
+    // await page.getByTestId('login-submit-button').click();
+    // await expect(page).toHaveURL('https://uat-b2b-apps.sociolabs.io/dashboard');
+};
+
+export const loginVN = async (page, baseUrl, email, password) => {
+    await page.goto(baseUrl);
+    await page.getByTestId('RNE__Input__text-input').first().fill(email);
+    await page.locator('input[type="password"]').fill(password);
+    await page.getByRole('button', { name: 'LOGIN' }).click();
     // await expect(page).toHaveURL('https://uat-b2b-apps.sociolabs.io/dashboard');
 };
 
@@ -191,7 +202,7 @@ export const selectDate = async (page, selectors, fieldName, daysFromToday = 0) 
   const targetDay = targetDate.getDate();
   
   console.log('Today: ' + today.getDate() + ', Selecting date: ' + targetDay);
-  await page.getByText(String(targetDay), { exact: true }).click({ force: true, timeout: 10000 });
+  await page.getByText(String(targetDay), { exact: true }).last().click({ force: true, timeout: 10000 });
   await page.getByText('SELECT', { exact: true }).click();
 };
 
