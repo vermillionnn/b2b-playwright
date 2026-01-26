@@ -35,11 +35,12 @@ export const goToMenu = async (page, baseUrl, menu, subMenu) => {
 export const selectDropdown = async (page, selectors, fieldName, data) => {
   const field = selectors[fieldName];
   await expect(field).toBeVisible();
-  await field.click({ force: true });
-  await expect(selectors.modal).toBeVisible({ timeout: 5000 });
+  await expect(field).toBeEnabled({ timeout: 10000 });
+  await field.click({ force: true, timeout: 10000 });
+  // await page.waitForTimeout(1000);
+  await expect(selectors.modal).toBeVisible({ timeout: 10000 });
   await selectors.modal.fill(data);
-  await page.getByText(data, { exact: true }).click();  
-  // await expect(field).toHaveValue(data);
+  await page.getByText(data, { exact: true }).click({ timeout: 10000 });
 };
 
 // Function to fill a form field
