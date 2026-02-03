@@ -188,12 +188,13 @@ export const search = async (page, selectors, searchValue) => {
   await expect(selectors.searchBox).toBeVisible();
   await selectors.searchBox.fill(searchValue);
   await clickButton(page, selectors, 'searchButton');
+  await page.waitForTimeout(500);
 };
 
 // Function to OK on Pop-up
 export const okPopUp = async (page, selectors, popUp) => {
   await expect(selectors[popUp]).toBeVisible({ timeout: 10000 });
-  await page.getByText('OK').nth(1).click();
+  await page.getByText('OK').nth(1).click({ force: true });
   await page.waitForLoadState('networkidle');
 };
 
@@ -228,4 +229,12 @@ export const uploadAttachment = async (page, selectors, buttonName, filePath) =>
     selectors[buttonName].click()
   ]);
   await fileChooser.setFiles(filePath);
+};
+
+// Function to Logout
+export const logout = async (page, username) => {
+  await expect(page.getByText(username).nth(3)).toBeVisible({ timeout: 5000 });
+  await page.getByText(username).nth(3).click();
+  await expect(page.getByText('Log out')).toBeVisible({ timeout: 5000 });
+  await page.getByText('Log out').click();
 };
