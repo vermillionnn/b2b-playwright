@@ -21,7 +21,7 @@ export class SalesOrderPage {
       attachmentButton: page.getByRole('button', { name: 'Add Attachment' }),
       addProductButton: page.getByRole('button', { name: 'Add Product' }),
       saveButton: page.getByRole('button', { name: 'Save', exact: true }),
-      saveFormButton: page.getByRole('button', { name: 'SAVE', exact: true }),
+      saveFormButton: page.getByRole('button', { name: 'SAVE', exact: true }),  
       editButton: page.getByRole('button', { name: 'Edit', exact: true }),
       requestConfirmationButton: page.getByRole('button', { name: 'Request Confirmation', exact: true }),
       
@@ -44,10 +44,17 @@ export class SalesOrderPage {
       // Sales Order Detail fields
       confirmButton: page.getByRole('button', { name: 'Confirm' }),
       cancelButton: page.getByRole('button', { name: 'Cancel' }),
+      submitButton: page.getByRole('button', { name: 'Submit' }),
       needApprovalStatus: page.locator('span').filter({ hasText: 'Need Approval' }),
       approvedStatus: page.locator('span').filter({ hasText: 'Approved' }),
       confirmPopUp: page.getByText('This sales order will be approved. Do you want to proceed?').first(),
       submittedPopUp: page.getByText('Sales order has been confirmed').first(),
+      cancelledPopUp: page.getByText('Sales order has been cancelled').first(),
+      cancelReasonPopUp: page.getByRole('textbox'),
+      cancelledStatus: page.locator('span').filter({ hasText: 'Cancelled' }),
+
+      // Header
+
     };
   }
 
