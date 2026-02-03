@@ -12,7 +12,7 @@
         "marketType": "GT",
         "businessType": "BT-AUTO-GT",
         "account": "AG-AUTO-GT",
-        "salesPersonCode":"AF-001",
+        "salesPersonCode": "AF-001",
         "salesPerson": "AF Salesman",
         "beautyAdvisor": "AF Beauty Advisor",
         "bankName": "Test Bank",
@@ -44,7 +44,7 @@
         "marketType": "MT",
         "businessType": "BT-AUTO-MT",
         "account": "AG-AUTO-MT",
-        "salesPersonCode":"AF-001",
+        "salesPersonCode": "AF-001",
         "salesPerson": "AF Salesman",
         "beautyAdvisor": "AF Beauty Advisor",
         "bankName": "Test Bank",
@@ -62,5 +62,9 @@
         "storeCode": "STORE-AUTO-TEST",
         "customerType": "AUTOMATION",
         "photoPath": "sample-file/mt-yellow.png"
+    },
+    "lastCreatedCustomer": {
+        "customerId": "6981d1c7673fc1eb2d3aace6",
+        "customerName": "AUTO-MT-03022026-0035"
     }
 }

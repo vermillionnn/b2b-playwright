@@ -51,9 +51,23 @@ export class CustomerRegPage {
       saveDraftButton: page.getByRole('button', { name: 'Save Draft' }),
       saveAddressButton: page.getByRole('button', { name: 'Save Address' }),
       submitButton: page.getByRole('button', { name: 'Submit' }),
+      okButton: page.getByText('OK', { exact: true }),
+      confirmButton: page.getByRole('button', { name: 'Confirm' }),
+      rejectButton: page.getByRole('button', { name: 'Reject' }),
+      searchButton: page.locator('div').filter({ hasText: /^Search$/ }).nth(2),
       
       // Search & List
       searchBox: page.getByPlaceholder('Search...'),
+
+      // PopUp & Toast
+      submittedPopUp: page.getByText('Customer Registration Submitted', { exact: true }),
+      approvedToast: page.getByText('Customer registration approved'),
+      rejectReasonPopUp: page.getByRole('textbox'),
+
+      // Customer Details
+      needApprovalStatus: page.locator('div').filter({ hasText: /^Need Approval$/ }).first(),
+      approvedStatus: page.locator('div').filter({ hasText: /^Approved$/ }).first(),
+      rejectedStatus: page.locator('div').filter({ hasText: /^Rejected$/ }).first(),
     };
   }
 }
