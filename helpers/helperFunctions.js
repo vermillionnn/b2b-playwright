@@ -36,8 +36,8 @@ export const selectDropdown = async (page, selectors, fieldName, data) => {
   const field = selectors[fieldName];
   await expect(field).toBeVisible();
   await expect(field).toBeEnabled({ timeout: 10000 });
-  await field.click({ force: true, timeout: 10000 });
-  // await page.waitForTimeout(1000);
+  await field.click({ force: true });
+  await page.waitForTimeout(1000);
   await expect(selectors.modal).toBeVisible({ timeout: 10000 });
   await selectors.modal.fill(data);
   await page.getByText(data, { exact: true }).click({ timeout: 10000 });
@@ -238,3 +238,35 @@ export const logout = async (page, username) => {
   await expect(page.getByText('Log out')).toBeVisible({ timeout: 5000 });
   await page.getByText('Log out').click();
 };
+
+// Function to add product
+export const addProduct = async (page, so, eanNo, productName, productQuantity) => {
+  await so.addProductButton.scrollIntoViewIfNeeded();
+  await so.addProductButton.click();
+
+  const priceResponsePromise = page.waitForResponse(response =>
+    response.url().includes('uat-b2b-api.sociolabs.io/product-price-rules/search') &&
+    response.status() === 200,
+    { timeout: 20000 }
+  );
+
+  await expect(so.productNameField).toBeVisible();
+  await expect(so.productNameField).toBeEnabled({ timeout: 10000 });
+  await so.productNameField.click({ force: true, timeout: 10000 });
+  // await page.waitForTimeout(1000);
+  await expect(so.modal).toBeVisible({ timeout: 10000 });
+  await so.modal.fill(eanNo);
+  await page.getByText(productName, { exact: true }).first().click({ timeout: 10000 });
+
+  // Get price from API response
+  const priceResponse = await priceResponsePromise;
+  const priceResponseData = await priceResponse.json();
+  const finalPrice = priceResponseData.data[0].final_price;
+  console.log('Extracted Final Price: ' + finalPrice);
+
+  await so.quantityField.fill(productQuantity);
+  
+  // Save product
+  await clickButton(page, so, 'saveButton');
+  await page.waitForTimeout(1000);
+}

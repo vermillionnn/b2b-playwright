@@ -1,11 +1,37 @@
 {
     "MT": {
-        "product": {
-            "name": "Banana Milk One Pack Sheet Mask",
-            "quantity": "1",
-            "ref_code": "API.SC-BMOP211",
-            "ean_no": "8806185797573"
-        },
+        "product": [
+            {
+                "name": "Banana Milk One Pack Sheet Mask",
+                "quantity": "1",
+                "ref_code": "API.SC-BMOP211",
+                "ean_no": "8806185797573"
+            },
+            {
+                "name": "Tea Tree Bija Pro Acne Serum",
+                "quantity": "1",
+                "ref_code": "RJK.SC-RTTBPASALL1",
+                "ean_no": "8858851436873"
+            },
+            {
+                "name": "Acne Patch Day",
+                "quantity": "1",
+                "ref_code": "DE.SC-APD6ALL1",
+                "ean_no": "4719745505454"
+            },
+            {
+                "name": "ARIUL 7days Mask Green Tea + S",
+                "quantity": "1",
+                "ref_code": "AU.SC-ADMGTS7ALL1",
+                "ean_no": "8809301767573"
+            },
+            {
+                "name": "ARIUL 7days Mask Lotus + N",
+                "quantity": "1",
+                "ref_code": "AU.SC-ADMLN7ALL1",
+                "ean_no": "8809301767597"
+            }
+        ],
         "customer": {
             "name": "AFT MT Customer Automation"
         },
@@ -17,12 +43,38 @@
         }
     },
     "GT": {
-        "product": {
-            "name": "Banana Milk One Pack Sheet Mask",
-            "quantity": "1",
-            "ref_code": "API.SC-BMOP211",
-            "ean_no": "8806185797573"
-        },
+        "product": [
+            {
+                "name": "Banana Milk One Pack Sheet Mask",
+                "quantity": "1",
+                "ref_code": "API.SC-BMOP211",
+                "ean_no": "8806185797573"
+            },
+            {
+                "name": "Tea Tree Bija Pro Acne Serum",
+                "quantity": "1",
+                "ref_code": "RJK.SC-RTTBPASALL1",
+                "ean_no": "8858851436873"
+            },
+            {
+                "name": "Acne Patch Day",
+                "quantity": "1",
+                "ref_code": "DE.SC-APD6ALL1",
+                "ean_no": "4719745505454"
+            },
+            {
+                "name": "ARIUL 7days Mask Green Tea + S",
+                "quantity": "1",
+                "ref_code": "AU.SC-ADMGTS7ALL1",
+                "ean_no": "8809301767573"
+            },
+            {
+                "name": "ARIUL 7days Mask Lotus + N",
+                "quantity": "1",
+                "ref_code": "AU.SC-ADMLN7ALL1",
+                "ean_no": "8809301767597"
+            }
+        ],
         "customer": {
             "name": "AFT GT Customer Automation"
         },
@@ -34,7 +86,7 @@
         }
     },
     "lastCreatedSalesOrder": {
-        "salesOrderId": "6981d14a14649c8dfdbed8fe",
-        "referenceCode": "SO/SDI/HO/2026/00001359"
+        "salesOrderId": "698328ee6b30187497c7773d",
+        "referenceCode": "SO/SDI/HO/2026/00001395"
     }
 }
