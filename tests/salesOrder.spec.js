@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import { SalesOrderPage } from './pages/SalesOrder.page';
 import loginData from './fixtures/loginData.json' assert { type: 'json' };
 import salesOrderData from './fixtures/salesOrderData.json' assert { type: 'json' };
+import promoData from './fixtures/promoData.json' assert { type: 'json' };
 import * as b2b from '../helpers/helperFunctions';
 import { getDate, getSequenceNumber } from '../helpers/helperFunctions';
 
@@ -46,7 +47,7 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
     
     await expect(so.modal).toBeVisible({ timeout: 10000 });
     await so.modal.fill(salesOrderData.MT.customer.name);
-    await page.getByText(salesOrderData.MT.customer.name).click({ timeout: 10000 });
+    await page.getByText(salesOrderData.MT.customer.name).click({ force: true, timeout: 10000 });
     
     // Extract customer data from API response
     const response = await responsePromise;
@@ -215,7 +216,7 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
     
     await expect(so.modal).toBeVisible({ timeout: 10000 });
     await so.modal.fill(salesOrderData.MT.customer.name);
-    await page.getByText(salesOrderData.MT.customer.name).click({ timeout: 10000 });
+    await page.getByText(salesOrderData.MT.customer.name).click({ force: true, timeout: 10000 });
     
     // Extract customer data from API response
     const response = await responsePromise;
@@ -376,7 +377,7 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
     
     await expect(so.modal).toBeVisible({ timeout: 10000 });
     await so.modal.fill(salesOrderData.GT.customer.name);
-    await page.getByText(salesOrderData.GT.customer.name).click({ timeout: 10000 });
+    await page.getByText(salesOrderData.GT.customer.name).click({ force: true, timeout: 10000 });
     
     // Extract customer data from API response
     const response = await responsePromise;
@@ -543,7 +544,7 @@ test.describe('[Test Set] Create Sales Order - Superadmin', () => {
     
     await expect(so.modal).toBeVisible({ timeout: 10000 });
     await so.modal.fill(salesOrderData.GT.customer.name);
-    await page.getByText(salesOrderData.GT.customer.name).click({ timeout: 10000 });
+    await page.getByText(salesOrderData.GT.customer.name).click({ force: true, timeout: 10000 });
     
     // Extract customer data from API response
     const response = await responsePromise;
@@ -706,7 +707,8 @@ test.describe('[Test Set] Sales Order Full Flow - Superadmin', () => {
     
     await expect(so.modal).toBeVisible({ timeout: 10000 });
     await so.modal.fill(salesOrderData.GT.customer.name);
-    await page.getByText(salesOrderData.GT.customer.name).click({ timeout: 10000 });
+    await expect(page.getByText(salesOrderData.GT.customer.name, { exact: true })).toBeVisible({ timeout: 5000 });
+    await page.getByText(salesOrderData.GT.customer.name, {exact: true}).click({ force: true, timeout: 10000 });
     
     // Extract customer data from API response
     const response = await responsePromise;
@@ -912,7 +914,8 @@ test.describe('[Test Set] Sales Order Full Flow - Superadmin', () => {
     
     await expect(so.modal).toBeVisible({ timeout: 10000 });
     await so.modal.fill(salesOrderData.MT.customer.name);
-    await page.getByText(salesOrderData.MT.customer.name).click({ timeout: 10000 });
+    await expect(page.getByText(salesOrderData.MT.customer.name, { exact: true })).toBeVisible({ timeout: 5000 });
+    await page.getByText(salesOrderData.MT.customer.name, {exact: true}).click({ force: true, timeout: 10000 });
     
     // Extract customer data from API response
     const response = await responsePromise;
@@ -1122,7 +1125,8 @@ test.describe('[Test Set] Sales Order Full Flow - Superadmin', () => {
     
     await expect(so.modal).toBeVisible({ timeout: 10000 });
     await so.modal.fill(salesOrderData.GT.customer.name);
-    await page.getByText(salesOrderData.GT.customer.name).click({ timeout: 10000 });
+    await expect(page.getByText(salesOrderData.GT.customer.name, { exact: true })).toBeVisible({ timeout: 5000 });
+    await page.getByText(salesOrderData.GT.customer.name, {exact: true}).click({ force: true, timeout: 10000 });
     
     // Extract customer data from API response
     const response = await responsePromise;
@@ -1330,7 +1334,8 @@ test.describe('[Test Set] Sales Order Full Flow - Superadmin', () => {
     
     await expect(so.modal).toBeVisible({ timeout: 10000 });
     await so.modal.fill(salesOrderData.MT.customer.name);
-    await page.getByText(salesOrderData.MT.customer.name).click({ timeout: 10000 });
+    await expect(page.getByText(salesOrderData.MT.customer.name, { exact: true })).toBeVisible({ timeout: 5000 });
+    await page.getByText(salesOrderData.MT.customer.name, {exact: true}).click({ force: true, timeout: 10000 });
     
     // Extract customer data from API response
     const response = await responsePromise;
@@ -1540,7 +1545,8 @@ test.describe('[Test Set] Sales Order Full Flow - Superadmin', () => {
     
     await expect(so.modal).toBeVisible({ timeout: 10000 });
     await so.modal.fill(salesOrderData.GT.customer.name);
-    await page.getByText(salesOrderData.GT.customer.name).click({ timeout: 10000 });
+    await expect(page.getByText(salesOrderData.GT.customer.name, { exact: true })).toBeVisible({ timeout: 5000 });
+    await page.getByText(salesOrderData.GT.customer.name, {exact: true}).click({ force: true, timeout: 10000 });
     
     // Extract customer data from API response
     const response = await responsePromise;
@@ -1751,7 +1757,8 @@ test.describe('[Test Set] Sales Order Full Flow - Superadmin', () => {
     
     await expect(so.modal).toBeVisible({ timeout: 10000 });
     await so.modal.fill(salesOrderData.MT.customer.name);
-    await page.getByText(salesOrderData.MT.customer.name).click({ timeout: 10000 });
+    await expect(page.getByText(salesOrderData.MT.customer.name, { exact: true })).toBeVisible({ timeout: 5000 });
+    await page.getByText(salesOrderData.MT.customer.name, { exact: true }).click({ force: true, timeout: 10000 });
     
     // Extract customer data from API response
     const response = await responsePromise;
