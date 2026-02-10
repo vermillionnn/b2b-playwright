@@ -413,6 +413,508 @@ test.describe('[Test Set] SKP Internal - Superadmin', () => {
 
     await page.waitForTimeout(500);
   });
+
+  // Test Case: Create SKP Internal GT - Multiple Customer & Brand Manual - Full Flow Approved
+  test('[Test Case] Create SKP Internal GT - Multiple Customer & Brand Manual - Full Flow Approved', async ({ page }) => {
+    const skpPage = new skpInternalPage(page);
+    const skp = skpPage.selectors;
+    const customerBrandFilePath = join(__dirname, './sample-file/GT-Import-Customer-Brand-SKP-Internal.csv')
+  
+    const sequenceNum = await getSequenceNumber('skpInternal');
+    const skpInternalNameSequence = 'AF-GT-SKP-INTERNAL-AUTO-' + getDate() + '-' + sequenceNum;
+    console.log('SKP Name: ' + skpInternalNameSequence);
+  
+    //GoTo Add SKP Internal Menu
+    await b2b.goToMenu(page, baseUrl, 'Promotion Agreement Form', 'Add SKP Internal');
+    await page.waitForLoadState('networkidle');
+
+    // Assert all fields are visible
+    await expect(skp.skpNameField).toBeVisible();
+    await expect(skp.descriptionField).toBeVisible();
+    await expect(skp.coaField).toBeVisible();
+    await expect(skp.skpTypeField).toBeVisible();
+    await expect(skp.fromDateField).toBeVisible();
+    await expect(skp.toDateField).toBeVisible();
+    await expect(skp.isActiveField).toBeVisible();
+    await expect(skp.totalEstimateBudgetField).toBeVisible();
+    await expect(skp.addCustomerBrandButton).toBeVisible();
+    await expect(skp.notesField).toBeVisible();
+    // await expect(skp.attachmentButton).toBeVisible();
+    await expect(skp.saveDraftButton).toBeVisible();
+    await expect(skp.requestConfirmationButton).toBeVisible();
+
+    // Fill SKP Name
+    await b2b.fillField(page, skp, 'skpNameField', skpInternalNameSequence);
+
+    // Fill Description
+    await b2b.fillField(page, skp, 'descriptionField', skpData.GT.description);
+
+    // Select COA
+    await b2b.selectDropdown(page, skp, 'coaField', skpData.GT.coa.name);
+
+    // Assert Tax ID Corporate and Personal are auto-filled and able to edit
+    await expect(skp.taxIdCorporateField).toBeVisible();
+    await expect(skp.TaxIdPersonalField).toBeVisible();
+
+    // Select SKP Type
+    await b2b.selectDropdown(page, skp, 'skpTypeField', skpData.GT.type);
+
+    // Fill From and To Date
+    await b2b.selectDate(page, skp, 'fromDateField', 0);
+    await b2b.selectDate(page, skp, 'toDateField', 1);
+
+    // Set Is Active
+    await b2b.selectDropdown(page, skp, 'isActiveField', 'Active');
+
+    // Fill Total Estimate Budget
+    await b2b.fillField(page, skp, 'totalEstimateBudgetField', skpData.GT.totalEstimateBudget);
+
+    // Add Customer Brand
+    await skp.addCustomerBrandButton.click();
+    await page.getByText('Import CSV', { exact: true }).click();
+    await expect(skp.importModal).toBeVisible();
+    await expect(skp.uploadFileButton).toBeVisible();
+    await b2b.uploadAttachment(page, skp, 'uploadFileButton', customerBrandFilePath);
+    await expect(skp.proceedButton).toBeVisible();
+    await skp.proceedButton.click();
+    await expect(skp.uploadSuccessPopUp).toBeVisible();
+    await expect(skp.OkButton).toBeVisible();
+    await skp.OkButton.click();
+
+    // await b2b.clickButton(page, skp, 'editButton');
+    await page.waitForLoadState('networkidle');
+    // await expect(page.getByText(skpData.toastMsg.addCustomerBrand, { exact: true })).toBeVisible();
+
+    // Edit and fill other fields
+    await expect(skp.editButton).toBeVisible();
+    await b2b.clickButton(page, skp, 'editButton');
+
+    // Fill notes
+    await expect(skp.notesField).toBeVisible();
+    await b2b.fillField(page, skp, 'notesField', skpData.GT.notes);
+
+    // Save Draft
+    await b2b.clickButton(page, skp, 'saveButton2');
+    await page.waitForLoadState('networkidle');
+    
+    // Upload attachment
+    await skp.attachmentButton.scrollIntoViewIfNeeded();
+    await expect(skp.attachmentButton).toBeVisible();
+    await b2b.uploadAttachment(page, skp, 'attachmentButton', attachmentFilePath);  
+
+    await skp.requestConfirmationButton.scrollIntoViewIfNeeded();
+    await expect(skp.requestConfirmationButton).toBeVisible();
+    await skp.requestConfirmationButton.click();
+    await page.waitForLoadState('networkidle');
+    await expect(skp.submittedPopUp).toBeVisible();
+    await expect(skp.OkButton).toBeVisible();
+    await skp.OkButton.click();
+
+    // Logout
+    await b2b.logout(page, loginData.superadminUser.name);
+
+    // Relogin
+    await b2b.login(page, baseUrl, loginData.approverUser.email, loginData.approverUser.password);
+    await b2b.goToMenu(page, baseUrl, 'Promotion Agreement Form', 'SKP Internal');
+    // await page.waitForLoadState('networkidle');
+    // await page.waitForTimeout(1000);
+    // await page.reload();
+    // await page.waitForTimeout(5000);
+
+    // Search for the SKP by SKP Name
+    // await b2b.search(page, skp, skpInternalNameSequence);
+    // await page.waitForLoadState('networkidle');
+
+    // Open the SKP
+    await page.getByText(skpInternalNameSequence, { exact: true }).first().click();
+    await page.waitForLoadState('networkidle');
+
+    // Approve the SKP
+    await expect(skp.approveButton).toBeVisible();
+    await skp.approveButton.click();
+    await expect(skp.confirmedPopUp).toBeVisible();
+    await expect(skp.OkButton).toBeVisible();
+    await skp.OkButton.click();
+
+    await page.waitForTimeout(500);
+  });
+
+  // Test Case: Create SKP Internal MT - Multiple Customer & Brand Manual - Full Flow Approved
+  test('[Test Case] Create SKP Internal MT - Multiple Customer & Brand Manual - Full Flow Approved', async ({ page }) => {
+    const skpPage = new skpInternalPage(page);
+    const skp = skpPage.selectors;
+    const customerBrandFilePath = join(__dirname, './sample-file/MT-Import-Customer-Brand-SKP-Internal.csv')
+  
+    const sequenceNum = await getSequenceNumber('skpInternal');
+    const skpInternalNameSequence = 'AF-MT-SKP-INTERNAL-AUTO-' + getDate() + '-' + sequenceNum;
+    console.log('SKP Name: ' + skpInternalNameSequence);
+  
+    //GoTo Add SKP Internal Menu
+    await b2b.goToMenu(page, baseUrl, 'Promotion Agreement Form', 'Add SKP Internal');
+    await page.waitForLoadState('networkidle');
+
+    // Assert all fields are visible
+    await expect(skp.skpNameField).toBeVisible();
+    await expect(skp.descriptionField).toBeVisible();
+    await expect(skp.coaField).toBeVisible();
+    await expect(skp.skpTypeField).toBeVisible();
+    await expect(skp.fromDateField).toBeVisible();
+    await expect(skp.toDateField).toBeVisible();
+    await expect(skp.isActiveField).toBeVisible();
+    await expect(skp.totalEstimateBudgetField).toBeVisible();
+    await expect(skp.addCustomerBrandButton).toBeVisible();
+    await expect(skp.notesField).toBeVisible();
+    // await expect(skp.attachmentButton).toBeVisible();
+    await expect(skp.saveDraftButton).toBeVisible();
+    await expect(skp.requestConfirmationButton).toBeVisible();
+
+    // Fill SKP Name
+    await b2b.fillField(page, skp, 'skpNameField', skpInternalNameSequence);
+
+    // Fill Description
+    await b2b.fillField(page, skp, 'descriptionField', skpData.MT.description);
+
+    // Select COA
+    await b2b.selectDropdown(page, skp, 'coaField', skpData.MT.coa.name);
+
+    // Assert Tax ID Corporate and Personal are auto-filled and able to edit
+    await expect(skp.taxIdCorporateField).toBeVisible();
+    await expect(skp.TaxIdPersonalField).toBeVisible();
+
+    // Select SKP Type
+    await b2b.selectDropdown(page, skp, 'skpTypeField', skpData.MT.type);
+
+    // Fill From and To Date
+    await b2b.selectDate(page, skp, 'fromDateField', 0);
+    await b2b.selectDate(page, skp, 'toDateField', 1);
+
+    // Set Is Active
+    await b2b.selectDropdown(page, skp, 'isActiveField', 'Active');
+
+    // Fill Total Estimate Budget
+    await b2b.fillField(page, skp, 'totalEstimateBudgetField', skpData.MT.totalEstimateBudget);
+
+    // Add Customer Brand
+    await skp.addCustomerBrandButton.click();
+    await page.getByText('Import CSV', { exact: true }).click();
+    await expect(skp.importModal).toBeVisible();
+    await expect(skp.uploadFileButton).toBeVisible();
+    await b2b.uploadAttachment(page, skp, 'uploadFileButton', customerBrandFilePath);
+    await expect(skp.proceedButton).toBeVisible();
+    await skp.proceedButton.click();
+    await expect(skp.uploadSuccessPopUp).toBeVisible();
+    await expect(skp.OkButton).toBeVisible();
+    await skp.OkButton.click();
+
+    // await b2b.clickButton(page, skp, 'editButton');
+    await page.waitForLoadState('networkidle');
+    // await expect(page.getByText(skpData.toastMsg.addCustomerBrand, { exact: true })).toBeVisible();
+
+    // Edit and fill other fields
+    await expect(skp.editButton).toBeVisible();
+    await b2b.clickButton(page, skp, 'editButton');
+
+    // Fill notes
+    await expect(skp.notesField).toBeVisible();
+    await b2b.fillField(page, skp, 'notesField', skpData.MT.notes);
+
+    // Save Draft
+    await b2b.clickButton(page, skp, 'saveButton2');
+    await page.waitForLoadState('networkidle');
+    
+    // Upload attachment
+    await skp.attachmentButton.scrollIntoViewIfNeeded();
+    await expect(skp.attachmentButton).toBeVisible();
+    await b2b.uploadAttachment(page, skp, 'attachmentButton', attachmentFilePath);  
+
+    await skp.requestConfirmationButton.scrollIntoViewIfNeeded();
+    await expect(skp.requestConfirmationButton).toBeVisible();
+    await skp.requestConfirmationButton.click();
+    await page.waitForLoadState('networkidle');
+    await expect(skp.submittedPopUp).toBeVisible();
+    await expect(skp.OkButton).toBeVisible();
+    await skp.OkButton.click();
+
+    // Logout
+    await b2b.logout(page, loginData.superadminUser.name);
+
+    // Relogin
+    await b2b.login(page, baseUrl, loginData.approverUser.email, loginData.approverUser.password);
+    await b2b.goToMenu(page, baseUrl, 'Promotion Agreement Form', 'SKP Internal');
+    await page.waitForLoadState('networkidle');
+    // await page.waitForTimeout(1000);
+    // await page.reload();
+    // await page.waitForTimeout(5000);
+
+    // Search for the SKP by SKP Name
+    // await b2b.search(page, skp, skpInternalNameSequence);
+    // await page.waitForTimeout(5000);
+    // await page.waitForLoadState('networkidle');
+
+    // Open the SKP
+    await expect(page.getByText(skpInternalNameSequence)).toBeVisible();
+    await page.getByText(skpInternalNameSequence, { exact: true }).first().click();
+    await page.waitForLoadState('networkidle');
+
+    // Approve the SKP
+    await expect(skp.approveButton).toBeVisible();
+    await skp.approveButton.click();
+    await expect(skp.confirmedPopUp).toBeVisible();
+    await expect(skp.OkButton).toBeVisible();
+    await skp.OkButton.click();
+
+    await page.waitForTimeout(500);
+  });
+
+  // Test Case: Create SKP Internal GT - Multiple Customer & Brand Manual - Full Flow Rejected
+  test('[Test Case] Create SKP Internal GT - Multiple Customer & Brand Manual - Full Flow Rejected', async ({ page }) => {
+    const skpPage = new skpInternalPage(page);
+    const skp = skpPage.selectors;
+    const customerBrandFilePath = join(__dirname, './sample-file/GT-Import-Customer-Brand-SKP-Internal.csv')
+  
+    const sequenceNum = await getSequenceNumber('skpInternal');
+    const skpInternalNameSequence = 'AF-GT-SKP-INTERNAL-AUTO-' + getDate() + '-' + sequenceNum;
+    console.log('SKP Name: ' + skpInternalNameSequence);
+  
+    //GoTo Add SKP Internal Menu
+    await b2b.goToMenu(page, baseUrl, 'Promotion Agreement Form', 'Add SKP Internal');
+    await page.waitForLoadState('networkidle');
+
+    // Assert all fields are visible
+    await expect(skp.skpNameField).toBeVisible();
+    await expect(skp.descriptionField).toBeVisible();
+    await expect(skp.coaField).toBeVisible();
+    await expect(skp.skpTypeField).toBeVisible();
+    await expect(skp.fromDateField).toBeVisible();
+    await expect(skp.toDateField).toBeVisible();
+    await expect(skp.isActiveField).toBeVisible();
+    await expect(skp.totalEstimateBudgetField).toBeVisible();
+    await expect(skp.addCustomerBrandButton).toBeVisible();
+    await expect(skp.notesField).toBeVisible();
+    // await expect(skp.attachmentButton).toBeVisible();
+    await expect(skp.saveDraftButton).toBeVisible();
+    await expect(skp.requestConfirmationButton).toBeVisible();
+
+    // Fill SKP Name
+    await b2b.fillField(page, skp, 'skpNameField', skpInternalNameSequence);
+
+    // Fill Description
+    await b2b.fillField(page, skp, 'descriptionField', skpData.GT.description);
+
+    // Select COA
+    await b2b.selectDropdown(page, skp, 'coaField', skpData.GT.coa.name);
+
+    // Assert Tax ID Corporate and Personal are auto-filled and able to edit
+    await expect(skp.taxIdCorporateField).toBeVisible();
+    await expect(skp.TaxIdPersonalField).toBeVisible();
+
+    // Select SKP Type
+    await b2b.selectDropdown(page, skp, 'skpTypeField', skpData.GT.type);
+
+    // Fill From and To Date
+    await b2b.selectDate(page, skp, 'fromDateField', 0);
+    await b2b.selectDate(page, skp, 'toDateField', 1);
+
+    // Set Is Active
+    await b2b.selectDropdown(page, skp, 'isActiveField', 'Active');
+
+    // Fill Total Estimate Budget
+    await b2b.fillField(page, skp, 'totalEstimateBudgetField', skpData.GT.totalEstimateBudget);
+
+    // Add Customer Brand
+    await skp.addCustomerBrandButton.click();
+    await page.getByText('Import CSV', { exact: true }).click();
+    await expect(skp.importModal).toBeVisible();
+    await expect(skp.uploadFileButton).toBeVisible();
+    await b2b.uploadAttachment(page, skp, 'uploadFileButton', customerBrandFilePath);
+    await expect(skp.proceedButton).toBeVisible();
+    await skp.proceedButton.click();
+    await expect(skp.uploadSuccessPopUp).toBeVisible();
+    await expect(skp.OkButton).toBeVisible();
+    await skp.OkButton.click();
+
+    // await b2b.clickButton(page, skp, 'editButton');
+    await page.waitForLoadState('networkidle');
+    // await expect(page.getByText(skpData.toastMsg.addCustomerBrand, { exact: true })).toBeVisible();
+
+    // Edit and fill other fields
+    await expect(skp.editButton).toBeVisible();
+    await b2b.clickButton(page, skp, 'editButton');
+
+    // Fill notes
+    await expect(skp.notesField).toBeVisible();
+    await b2b.fillField(page, skp, 'notesField', skpData.GT.notes);
+
+    // Save Draft
+    await b2b.clickButton(page, skp, 'saveButton2');
+    await page.waitForLoadState('networkidle');
+    
+    // Upload attachment
+    await skp.attachmentButton.scrollIntoViewIfNeeded();
+    await expect(skp.attachmentButton).toBeVisible();
+    await b2b.uploadAttachment(page, skp, 'attachmentButton', attachmentFilePath);  
+
+    await skp.requestConfirmationButton.scrollIntoViewIfNeeded();
+    await expect(skp.requestConfirmationButton).toBeVisible();
+    await skp.requestConfirmationButton.click();
+    await page.waitForLoadState('networkidle');
+    await expect(skp.submittedPopUp).toBeVisible();
+    await expect(skp.OkButton).toBeVisible();
+    await skp.OkButton.click();
+
+    // Logout
+    await b2b.logout(page, loginData.superadminUser.name);
+
+    // Relogin
+    await b2b.login(page, baseUrl, loginData.approverUser.email, loginData.approverUser.password);
+    await b2b.goToMenu(page, baseUrl, 'Promotion Agreement Form', 'SKP Internal');
+    // await page.waitForLoadState('networkidle');
+    // await page.waitForTimeout(1000);
+    // await page.reload();
+    // await page.waitForTimeout(5000);
+
+    // Search for the SKP by SKP Name
+    // await b2b.search(page, skp, skpInternalNameSequence);
+    // await page.waitForLoadState('networkidle');
+
+    // Open the SKP
+    await page.getByText(skpInternalNameSequence, { exact: true }).first().click();
+    await page.waitForLoadState('networkidle');
+
+    // Reject the SKP
+    await expect(skp.rejectButton).toBeVisible();
+    await skp.rejectButton.click();
+    await expect(skp.rejectedPopUp).toBeVisible();
+    await expect(skp.OkButton).toBeVisible();
+    await skp.OkButton.click();
+
+    await page.waitForTimeout(500);
+  });
+
+  // Test Case: Create SKP Internal MT - Multiple Customer & Brand Manual - Full Flow Rejected
+  test('[Test Case] Create SKP Internal MT - Multiple Customer & Brand Manual - Full Flow Rejected', async ({ page }) => {
+    const skpPage = new skpInternalPage(page);
+    const skp = skpPage.selectors;
+    const customerBrandFilePath = join(__dirname, './sample-file/MT-Import-Customer-Brand-SKP-Internal.csv')
+  
+    const sequenceNum = await getSequenceNumber('skpInternal');
+    const skpInternalNameSequence = 'AF-MT-SKP-INTERNAL-AUTO-' + getDate() + '-' + sequenceNum;
+    console.log('SKP Name: ' + skpInternalNameSequence);
+  
+    //GoTo Add SKP Internal Menu
+    await b2b.goToMenu(page, baseUrl, 'Promotion Agreement Form', 'Add SKP Internal');
+    await page.waitForLoadState('networkidle');
+
+    // Assert all fields are visible
+    await expect(skp.skpNameField).toBeVisible();
+    await expect(skp.descriptionField).toBeVisible();
+    await expect(skp.coaField).toBeVisible();
+    await expect(skp.skpTypeField).toBeVisible();
+    await expect(skp.fromDateField).toBeVisible();
+    await expect(skp.toDateField).toBeVisible();
+    await expect(skp.isActiveField).toBeVisible();
+    await expect(skp.totalEstimateBudgetField).toBeVisible();
+    await expect(skp.addCustomerBrandButton).toBeVisible();
+    await expect(skp.notesField).toBeVisible();
+    // await expect(skp.attachmentButton).toBeVisible();
+    await expect(skp.saveDraftButton).toBeVisible();
+    await expect(skp.requestConfirmationButton).toBeVisible();
+
+    // Fill SKP Name
+    await b2b.fillField(page, skp, 'skpNameField', skpInternalNameSequence);
+
+    // Fill Description
+    await b2b.fillField(page, skp, 'descriptionField', skpData.MT.description);
+
+    // Select COA
+    await b2b.selectDropdown(page, skp, 'coaField', skpData.MT.coa.name);
+
+    // Assert Tax ID Corporate and Personal are auto-filled and able to edit
+    await expect(skp.taxIdCorporateField).toBeVisible();
+    await expect(skp.TaxIdPersonalField).toBeVisible();
+
+    // Select SKP Type
+    await b2b.selectDropdown(page, skp, 'skpTypeField', skpData.MT.type);
+
+    // Fill From and To Date
+    await b2b.selectDate(page, skp, 'fromDateField', 0);
+    await b2b.selectDate(page, skp, 'toDateField', 1);
+
+    // Set Is Active
+    await b2b.selectDropdown(page, skp, 'isActiveField', 'Active');
+
+    // Fill Total Estimate Budget
+    await b2b.fillField(page, skp, 'totalEstimateBudgetField', skpData.MT.totalEstimateBudget);
+
+    // Add Customer Brand
+    await skp.addCustomerBrandButton.click();
+    await page.getByText('Import CSV', { exact: true }).click();
+    await expect(skp.importModal).toBeVisible();
+    await expect(skp.uploadFileButton).toBeVisible();
+    await b2b.uploadAttachment(page, skp, 'uploadFileButton', customerBrandFilePath);
+    await expect(skp.proceedButton).toBeVisible();
+    await skp.proceedButton.click();
+    await expect(skp.uploadSuccessPopUp).toBeVisible();
+    await expect(skp.OkButton).toBeVisible();
+    await skp.OkButton.click();
+
+    // await b2b.clickButton(page, skp, 'editButton');
+    await page.waitForLoadState('networkidle');
+    // await expect(page.getByText(skpData.toastMsg.addCustomerBrand, { exact: true })).toBeVisible();
+
+    // Edit and fill other fields
+    await expect(skp.editButton).toBeVisible();
+    await b2b.clickButton(page, skp, 'editButton');
+
+    // Fill notes
+    await expect(skp.notesField).toBeVisible();
+    await b2b.fillField(page, skp, 'notesField', skpData.MT.notes);
+
+    // Save Draft
+    await b2b.clickButton(page, skp, 'saveButton2');
+    await page.waitForLoadState('networkidle');
+    
+    // Upload attachment
+    await skp.attachmentButton.scrollIntoViewIfNeeded();
+    await expect(skp.attachmentButton).toBeVisible();
+    await b2b.uploadAttachment(page, skp, 'attachmentButton', attachmentFilePath);  
+
+    await skp.requestConfirmationButton.scrollIntoViewIfNeeded();
+    await expect(skp.requestConfirmationButton).toBeVisible();
+    await skp.requestConfirmationButton.click();
+    await page.waitForLoadState('networkidle');
+    await expect(skp.submittedPopUp).toBeVisible();
+    await expect(skp.OkButton).toBeVisible();
+    await skp.OkButton.click();
+
+    // Logout
+    await b2b.logout(page, loginData.superadminUser.name);
+
+    // Relogin
+    await b2b.login(page, baseUrl, loginData.approverUser.email, loginData.approverUser.password);
+    await b2b.goToMenu(page, baseUrl, 'Promotion Agreement Form', 'SKP Internal');
+    // await page.waitForLoadState('networkidle');
+    // await page.waitForTimeout(1000);
+    // await page.reload();
+    // await page.waitForTimeout(5000);
+
+    // Search for the SKP by SKP Name
+    // await b2b.search(page, skp, skpInternalNameSequence);
+    // await page.waitForLoadState('networkidle');
+
+    // Open the SKP
+    await page.getByText(skpInternalNameSequence, { exact: true }).first().click();
+    await page.waitForLoadState('networkidle');
+
+    // Reject the SKP
+    await expect(skp.rejectButton).toBeVisible();
+    await skp.rejectButton.click();
+    await expect(skp.rejectedPopUp).toBeVisible();
+    await expect(skp.OkButton).toBeVisible();
+    await skp.OkButton.click();
+
+    await page.waitForTimeout(500);
+  });
 });
 
 

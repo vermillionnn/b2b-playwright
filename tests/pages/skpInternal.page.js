@@ -26,6 +26,12 @@ export class skpInternalPage {
         saveButton2: page.getByRole('button', { name: 'SAVE', exact: true }),
         cancelButton: page.getByRole('button', { name: 'Cancel', exact: true }),
         editButton: page.getByRole('button', { name: 'Edit', exact: true }),
+        uploadFileButton: page.getByRole('button', { name: 'Upload File', exact: true }),
+        proceedButton: page.getByRole('button', { name: 'Proceed', exact: true }),
+        OkButton: page.getByText('OK'),
+        approveButton: page.getByRole('button', { name: 'Approve', exact: true }),
+        searchButton: page.getByText('Search'),
+        rejectButton: page.getByRole('button', { name: 'Reject', exact: true }),
 
         //Modal, Popups, etc.
         modal: page.getByRole('textbox', { name: 'Search something here...' }),
@@ -34,6 +40,12 @@ export class skpInternalPage {
         brandField: page.locator('div').filter({ hasText: /^Brand\*$/ }).getByRole('textbox'),
         budgetSampleField: page.locator('div').filter({ hasText: /^Budget Sample\*$/ }).getByRole('textbox'),
         outletField: page.locator('div').filter({ hasText: /^Outlet Name\*$/ }).getByRole('textbox'),
+        importModal: page.getByText('Upload CSV file'),
+        uploadSuccessPopUp: page.getByText('List Customer And Brand Budget Has Been Added'),
+        confirmedPopUp: page.getByText('SKP Internal Confirmed'),
+        submittedPopUp: page.getByText('SKP Internal Submitted and need confirmation'),
+        searchBox: page.getByRole('textbox', { name: 'Search by SKP Name, SKP Number' }),
+        rejectedPopUp: page.getByText('SKP Internal Rejected'),
     };
   }
 
