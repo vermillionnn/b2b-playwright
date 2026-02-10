@@ -8,11 +8,7 @@ node_modules/
 /playwright/.auth/
 env/
 *.env
-/tests/fixtures/loginData.json
-/tests/fixtures/customerSequence.json
-/tests/fixtures/customerEmailSequence.json
-/tests/fixtures/salesOrderSequence.json
-/tests/fixtures/skpInternalSequence.json
+/tests/fixtures/
 allure-results/
 allure-report/
 additional-file-for-b2b-playwright.zip
