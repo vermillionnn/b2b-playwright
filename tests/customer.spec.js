@@ -14,7 +14,7 @@ dotenv.config({ path: 'env/UAT.env' });
 // Test Data
 const baseUrl = process.env.BASE_URL;
 
-test.use({ permissions: ['geolocation'], geolocation: { latitude: -6.200000, longitude: 106.816666 } });
+test.use({ permissions: ['geolocation'], geolocation: { latitude: -6.189772, longitude: 106.737315 } });
 
 // Create Customer
 test.describe('[Test Set] Customer Registration - Superadmin', () => {
