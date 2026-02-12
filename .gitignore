@@ -14,5 +14,5 @@ allure-report/
 not-used/
 .auth/
 *.json
-!package.json
-!package-lock.json
+package.json
+package-lock.json
